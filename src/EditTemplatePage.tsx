@@ -35,19 +35,7 @@ export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePag
   const handleAddDataSource = (dataSource: DataSource) => {
     const newDataSource: TemplateDataSource = {
       dataSourceId: dataSource.id,
-      key: (() => {
-        const trimmed = dataSource.label.trim()
-        if (!trimmed) {
-          // fallback to id if label is empty/whitespace
-          return String(dataSource.id)
-        }
-        // generate key: join words with underscores, remove non-alphanum except _
-        return trimmed
-          .toLowerCase()
-          .split(/\s+/)
-          .join('_')
-          .replace(/[^a-z0-9_]/g, '')
-      })(),
+      key: dataSource.defaultKey,
     }
     setSelectedDataSources([...selectedDataSources, newDataSource])
     setShowDataSourceDropdown(false)

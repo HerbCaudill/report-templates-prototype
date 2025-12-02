@@ -11,6 +11,7 @@ export type DataSource = {
   id: string
   type: DataSourceType
   label: string
+  defaultKey: string
   category: 'Projects' | 'Indicators' | 'Data tables' | 'Saved reports'
 }
 
