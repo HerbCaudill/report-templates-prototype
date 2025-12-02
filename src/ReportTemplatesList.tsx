@@ -15,24 +15,22 @@ export function ReportTemplatesList({ templates, onEdit, onGenerate, onNewTempla
       <div className="flex flex-col divide-y divide-gray-200 border-y border-gray-200 mb-4">
         {templates.map(template => (
           <div key={template.id} className="flex items-center gap-3 py-2.5">
+            <button
+              type="button"
+              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+              onClick={() => onEdit(template)}
+            >
+              Edit
+            </button>
             <WordIcon />
             <span className="flex-1 text-sm text-gray-800">{template.name}</span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                onClick={() => onEdit(template)}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                onClick={() => onGenerate(template)}
-              >
-                Generate
-              </button>
-            </div>
+            <button
+              type="button"
+              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+              onClick={() => onGenerate(template)}
+            >
+              Generate
+            </button>
           </div>
         ))}
       </div>
