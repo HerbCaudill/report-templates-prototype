@@ -1,21 +1,14 @@
 import type { ReportTemplate } from './types'
-import { WordIcon, TrashIcon } from './icons'
+import { WordIcon } from './icons'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
   onEdit: (template: ReportTemplate) => void
   onGenerate: (template: ReportTemplate) => void
-  onDelete: (template: ReportTemplate) => void
   onNewTemplate: () => void
 }
 
-export function ReportTemplatesList({
-  templates,
-  onEdit,
-  onGenerate,
-  onDelete,
-  onNewTemplate,
-}: ReportTemplatesListProps) {
+export function ReportTemplatesList({ templates, onEdit, onGenerate, onNewTemplate }: ReportTemplatesListProps) {
   return (
     <div className="w-[32rem]">
       <h2 className="text-sm font-semibold text-gray-800 mb-3">Report templates</h2>
@@ -38,13 +31,6 @@ export function ReportTemplatesList({
                 onClick={() => onGenerate(template)}
               >
                 Generate
-              </button>
-              <button
-                type="button"
-                className="p-1.5 text-gray-400 hover:text-gray-600"
-                onClick={() => onDelete(template)}
-              >
-                <TrashIcon />
               </button>
             </div>
           </div>

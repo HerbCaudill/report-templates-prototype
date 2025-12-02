@@ -1,15 +1,16 @@
 import { useState } from 'react'
 import type { DataSource, ReportTemplate, TemplateDataSource, TemplateFile } from './types'
 import { dataSources } from './mockData'
-import { WordIcon, TrashIcon } from './icons'
+import { WordIcon, TrashIcon, CheckIcon } from './icons'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
   onSave: (template: ReportTemplate) => void
+  onDelete: (template: ReportTemplate) => void
   onCancel: () => void
 }
 
-export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePageProps) {
+export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditTemplatePageProps) {
   const [name, setName] = useState(template?.name ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
@@ -189,13 +190,14 @@ export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePag
         )}
       </div>
 
-      <div className="mt-10 flex gap-2">
+      <div className="mt-10 flex items-center gap-2">
         <button
           type="button"
-          className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          className="flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
           onClick={handleSave}
         >
-          Save
+          <CheckIcon />
+          Done
         </button>
         <button
           type="button"
@@ -204,6 +206,15 @@ export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePag
         >
           Cancel
         </button>
+        {template && (
+          <button
+            type="button"
+            className="ml-auto p-2 text-gray-400 hover:text-gray-600"
+            onClick={() => onDelete(template)}
+          >
+            <TrashIcon />
+          </button>
+        )}
       </div>
     </div>
   )

@@ -47,9 +47,12 @@ function App() {
     setGeneratingTemplate(template)
   }
 
-  const handleDelete = (template: ReportTemplate) => {
+  const handleDeleteTemplate = (template: ReportTemplate) => {
     if (confirm(`Delete "${template.name}"?`)) {
       setTemplates(templates.filter(t => t.id !== template.id))
+      setEditingTemplate(null)
+      setIsNewTemplate(false)
+      setView('list')
     }
   }
 
@@ -74,13 +77,17 @@ function App() {
           templates={templates}
           onEdit={handleEdit}
           onGenerate={handleGenerate}
-          onDelete={handleDelete}
           onNewTemplate={handleNewTemplate}
         />
       )}
 
       {view === 'edit' && (
-        <EditTemplatePage template={editingTemplate} onSave={handleSaveTemplate} onCancel={handleCancelEdit} />
+        <EditTemplatePage
+          template={editingTemplate}
+          onSave={handleSaveTemplate}
+          onDelete={handleDeleteTemplate}
+          onCancel={handleCancelEdit}
+        />
       )}
 
       {generatingTemplate && (
