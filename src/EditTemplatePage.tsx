@@ -102,7 +102,7 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
           <table className="mb-3 w-full border-collapse text-[13px]">
             <thead>
               <tr>
-                <th className="border-b border-gray-200 p-2 text-left font-medium text-gray-500">Data sources</th>
+                <th className="border-b border-gray-200 p-2 text-left font-medium text-gray-500">Name</th>
                 <th className="border-b border-gray-200 p-2 text-left font-medium text-gray-500">Key</th>
                 <th className="border-b border-gray-200 p-2"></th>
               </tr>
