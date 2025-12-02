@@ -2,30 +2,22 @@ import type { DataSource, Project, ReportingPeriod, ReportTemplate } from './typ
 
 export const dataSources: DataSource[] = [
   // Projects
-  { id: 'ds-1', type: 'projects-all', label: 'All projects', defaultKey: 'projects', category: 'Projects' },
-  { id: 'ds-2', type: 'projects-single', label: 'Single project', defaultKey: 'project', category: 'Projects' },
+  { id: 'projects-all', label: 'All projects', defaultKey: 'projects', category: 'Projects' },
+  { id: 'projects-single', label: 'Single project', defaultKey: 'project', category: 'Projects' },
   {
-    id: 'ds-3',
-    type: 'projects-single-reporting-period',
+    id: 'projects-single-reporting-period',
     label: 'Single project, single reporting period',
     defaultKey: 'project',
     category: 'Projects',
   },
   // Indicators
-  { id: 'ds-4', type: 'indicators-all', label: 'All indicators', defaultKey: 'indicators', category: 'Indicators' },
-  { id: 'ds-5', type: 'indicators-single', label: 'Single indicator', defaultKey: 'indicator', category: 'Indicators' },
+  { id: 'indicators-all', label: 'All indicators', defaultKey: 'indicators', category: 'Indicators' },
+  { id: 'indicators-single', label: 'Single indicator', defaultKey: 'indicator', category: 'Indicators' },
   // Data tables
-  { id: 'ds-6', type: 'data-table', label: 'Journalist trainings', defaultKey: 'trainings', category: 'Data tables' },
-  { id: 'ds-7', type: 'data-table', label: 'Vaccinations', defaultKey: 'vaccinations', category: 'Data tables' },
-  { id: 'ds-8', type: 'data-table', label: 'etc.', defaultKey: 'etc', category: 'Data tables' },
+  { id: 'dt-1', label: 'Journalist trainings', category: 'Data tables' },
+  { id: 'dt-2', label: 'Vaccinations', category: 'Data tables' },
   // Saved reports
-  {
-    id: 'ds-9',
-    type: 'saved-report',
-    label: "User's fancy saved report",
-    defaultKey: 'saved_report',
-    category: 'Saved reports',
-  },
+  { id: 'sr-1', label: 'Trainings by quarter', category: 'Saved reports' },
 ]
 
 export const projects: Project[] = [
@@ -37,11 +29,13 @@ export const projects: Project[] = [
 ]
 
 export const reportingPeriods: ReportingPeriod[] = [
-  { id: 'rp-1', name: 'Q1 2025' },
-  { id: 'rp-2', name: 'Q2 2025' },
-  { id: 'rp-3', name: 'Q3 2025' },
-  { id: 'rp-4', name: 'Q4 2025' },
-  { id: 'rp-5', name: 'Annual 2024' },
+  { id: 'rp-2', name: 'Q2 2024' },
+  { id: 'rp-3', name: 'Q3 2024' },
+  { id: 'rp-4', name: 'Q4 2024' },
+  { id: 'rp-5', name: 'Q1 2025' },
+  { id: 'rp-6', name: 'Q2 2025' },
+  { id: 'rp-7', name: 'Q3 2025' },
+  { id: 'rp-8', name: 'Q4 2025' },
 ]
 
 export const initialTemplates: ReportTemplate[] = [
@@ -49,15 +43,21 @@ export const initialTemplates: ReportTemplate[] = [
     id: 'tpl-1',
     name: 'XYZ report',
     dataSources: [
-      { dataSourceId: 'ds-3', key: 'project' },
-      { dataSourceId: 'ds-6', key: 'trainings' },
+      { dataSourceId: 'projects-single-reporting-period', key: 'project' },
+      { dataSourceId: 'dt-1', key: 'trainings' },
     ],
     templateFile: { name: 'XYZ template.docx', type: 'docx' },
   },
   {
     id: 'tpl-2',
-    name: 'AOR-GOR report',
+    name: 'QRS report',
     dataSources: [],
     templateFile: null,
+  },
+  {
+    id: 'tpl-3',
+    name: 'Indicator definition',
+    dataSources: [{ dataSourceId: 'indicators-single', key: 'indicator' }],
+    templateFile: { name: 'Indicator definition.docx', type: 'docx' },
   },
 ]

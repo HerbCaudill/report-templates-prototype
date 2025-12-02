@@ -1,17 +1,7 @@
-export type DataSourceType =
-  | 'projects-all'
-  | 'projects-single'
-  | 'projects-single-reporting-period'
-  | 'indicators-all'
-  | 'indicators-single'
-  | 'data-table'
-  | 'saved-report'
-
 export type DataSource = {
   id: string
-  type: DataSourceType
   label: string
-  defaultKey: string
+  defaultKey?: string
   category: 'Projects' | 'Indicators' | 'Data tables' | 'Saved reports'
 }
 

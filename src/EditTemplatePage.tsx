@@ -32,10 +32,18 @@ export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePag
     return acc
   }, {})
 
+  const getKey = (dataSource: DataSource): string => {
+    if (dataSource.defaultKey) return dataSource.defaultKey
+    return dataSource.label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '_')
+      .replace(/^_|_$/g, '')
+  }
+
   const handleAddDataSource = (dataSource: DataSource) => {
     const newDataSource: TemplateDataSource = {
       dataSourceId: dataSource.id,
-      key: dataSource.defaultKey,
+      key: getKey(dataSource),
     }
     setSelectedDataSources([...selectedDataSources, newDataSource])
     setShowDataSourceDropdown(false)
