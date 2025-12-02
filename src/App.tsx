@@ -47,6 +47,12 @@ function App() {
     setGeneratingTemplate(template)
   }
 
+  const handleDelete = (template: ReportTemplate) => {
+    if (confirm(`Delete "${template.name}"?`)) {
+      setTemplates(templates.filter(t => t.id !== template.id))
+    }
+  }
+
   const handleGenerateReport = (options: {
     projectId: string
     reportingPeriodId: string
@@ -68,6 +74,7 @@ function App() {
           templates={templates}
           onEdit={handleEdit}
           onGenerate={handleGenerate}
+          onDelete={handleDelete}
           onNewTemplate={handleNewTemplate}
         />
       )}
