@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { ReportTemplate } from './types'
 import { initialTemplates } from './mockData'
 import { ReportTemplatesList } from './ReportTemplatesList'
@@ -14,16 +14,29 @@ function App() {
   const [isNewTemplate, setIsNewTemplate] = useState(false)
   const [generatingTemplate, setGeneratingTemplate] = useState<ReportTemplate | null>(null)
 
+  useEffect(() => {
+    const handlePopState = () => {
+      setView('list')
+      setEditingTemplate(null)
+      setIsNewTemplate(false)
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
   const handleEdit = (template: ReportTemplate) => {
     setEditingTemplate(template)
     setIsNewTemplate(false)
     setView('edit')
+    window.history.pushState({ view: 'edit' }, '', '#edit')
   }
 
   const handleNewTemplate = () => {
     setEditingTemplate(null)
     setIsNewTemplate(true)
     setView('edit')
+    window.history.pushState({ view: 'edit' }, '', '#new')
   }
 
   const handleTemplateChange = (template: ReportTemplate) => {
@@ -47,6 +60,7 @@ function App() {
     setEditingTemplate(null)
     setIsNewTemplate(false)
     setView('list')
+    window.history.back()
   }
 
   const handleGenerate = (template: ReportTemplate) => {
@@ -59,6 +73,7 @@ function App() {
       setEditingTemplate(null)
       setIsNewTemplate(false)
       setView('list')
+      window.history.back()
     }
   }
 
