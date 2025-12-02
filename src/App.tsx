@@ -26,18 +26,24 @@ function App() {
     setView('edit')
   }
 
-  const handleSaveTemplate = (template: ReportTemplate) => {
+  const handleTemplateChange = (template: ReportTemplate) => {
     if (isNewTemplate) {
-      setTemplates([...templates, template])
+      // Check if template already exists (was just added)
+      const exists = templates.some(t => t.id === template.id)
+      if (exists) {
+        setTemplates(templates.map(t => (t.id === template.id ? template : t)))
+      } else {
+        setTemplates([...templates, template])
+      }
+      setIsNewTemplate(false)
+      setEditingTemplate(template)
     } else {
       setTemplates(templates.map(t => (t.id === template.id ? template : t)))
+      setEditingTemplate(template)
     }
-    setEditingTemplate(null)
-    setIsNewTemplate(false)
-    setView('list')
   }
 
-  const handleCancelEdit = () => {
+  const handleDone = () => {
     setEditingTemplate(null)
     setIsNewTemplate(false)
     setView('list')
@@ -84,9 +90,9 @@ function App() {
       {view === 'edit' && (
         <EditTemplatePage
           template={editingTemplate}
-          onSave={handleSaveTemplate}
+          onChange={handleTemplateChange}
           onDelete={handleDeleteTemplate}
-          onCancel={handleCancelEdit}
+          onDone={handleDone}
         />
       )}
 

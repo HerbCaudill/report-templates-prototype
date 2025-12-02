@@ -5,16 +5,30 @@ import { WordIcon, TrashIcon, CheckIcon } from './icons'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
-  onSave: (template: ReportTemplate) => void
+  onChange: (template: ReportTemplate) => void
   onDelete: (template: ReportTemplate) => void
-  onCancel: () => void
+  onDone: () => void
 }
 
-export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditTemplatePageProps) {
+export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditTemplatePageProps) {
+  const [id] = useState(template?.id ?? `tpl-${Date.now()}`)
   const [name, setName] = useState(template?.name ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
+
+  const saveChanges = (updates: {
+    name?: string
+    dataSources?: TemplateDataSource[]
+    templateFile?: TemplateFile | null
+  }) => {
+    onChange({
+      id,
+      name: updates.name ?? name,
+      dataSources: updates.dataSources ?? selectedDataSources,
+      templateFile: updates.templateFile !== undefined ? updates.templateFile : templateFile,
+    })
+  }
 
   // Group data sources by category
   const groupedDataSources = dataSources.reduce<Record<string, DataSource[]>>((acc, ds) => {
@@ -39,17 +53,27 @@ export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditT
       dataSourceId: dataSource.id,
       key: getKey(dataSource),
     }
-    setSelectedDataSources([...selectedDataSources, newDataSource])
+    const updated = [...selectedDataSources, newDataSource]
+    setSelectedDataSources(updated)
     setShowDataSourceDropdown(false)
+    saveChanges({ dataSources: updated })
   }
   const handleRemoveDataSource = (index: number) => {
-    setSelectedDataSources(selectedDataSources.filter((_, i) => i !== index))
+    const updated = selectedDataSources.filter((_, i) => i !== index)
+    setSelectedDataSources(updated)
+    saveChanges({ dataSources: updated })
   }
 
   const handleKeyChange = (index: number, newKey: string) => {
     const updated = [...selectedDataSources]
     updated[index] = { ...updated[index], key: newKey }
     setSelectedDataSources(updated)
+    saveChanges({ dataSources: updated })
+  }
+
+  const handleNameChange = (newName: string) => {
+    setName(newName)
+    saveChanges({ name: newName })
   }
 
   const handleFileUpload = () => {
@@ -58,20 +82,13 @@ export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditT
     if (fileName) {
       const extension = fileName.split('.').pop()?.toLowerCase()
       if (extension === 'docx' || extension === 'xlsx' || extension === 'pptx') {
-        setTemplateFile({ name: fileName, type: extension })
+        const newFile = { name: fileName, type: extension }
+        setTemplateFile(newFile)
+        saveChanges({ templateFile: newFile })
       } else {
         alert('Please use .docx, .xlsx, or .pptx files')
       }
     }
-  }
-
-  const handleSave = () => {
-    onSave({
-      id: template?.id ?? `tpl-${Date.now()}`,
-      name,
-      dataSources: selectedDataSources,
-      templateFile,
-    })
   }
 
   const getDataSourceLabel = (dataSourceId: string) => {
@@ -90,7 +107,7 @@ export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditT
           id="template-name"
           type="text"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={e => handleNameChange(e.target.value)}
           placeholder="Template name"
           className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
         />
@@ -190,31 +207,25 @@ export function EditTemplatePage({ template, onSave, onDelete, onCancel }: EditT
         )}
       </div>
 
-      <div className="mt-10 flex items-center gap-2">
+      <div className="mt-10 flex items-center">
+        {template && (
+          <button
+            type="button"
+            className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
+            onClick={() => onDelete(template)}
+          >
+            <TrashIcon />
+            Delete this report template
+          </button>
+        )}
         <button
           type="button"
-          className="flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-          onClick={handleSave}
+          className="ml-auto flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          onClick={onDone}
         >
           <CheckIcon />
           Done
         </button>
-        <button
-          type="button"
-          className="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-        {template && (
-          <button
-            type="button"
-            className="ml-auto p-2 text-gray-400 hover:text-gray-600"
-            onClick={() => onDelete(template)}
-          >
-            <TrashIcon />
-          </button>
-        )}
       </div>
     </div>
   )
