@@ -12,12 +12,11 @@ function WordIcon() {
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
-  isNew: boolean
   onSave: (template: ReportTemplate) => void
   onCancel: () => void
 }
 
-export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemplatePageProps) {
+export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePageProps) {
   const [name, setName] = useState(template?.name ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
@@ -34,14 +33,25 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
   }, {})
 
   const handleAddDataSource = (dataSource: DataSource) => {
-    const newDs: TemplateDataSource = {
+    const newDataSource: TemplateDataSource = {
       dataSourceId: dataSource.id,
-      key: dataSource.label.toLowerCase().split(' ')[0],
+      key: (() => {
+        const trimmed = dataSource.label.trim()
+        if (!trimmed) {
+          // fallback to id if label is empty/whitespace
+          return String(dataSource.id)
+        }
+        // generate key: join words with underscores, remove non-alphanum except _
+        return trimmed
+          .toLowerCase()
+          .split(/\s+/)
+          .join('_')
+          .replace(/[^a-z0-9_]/g, '')
+      })(),
     }
-    setSelectedDataSources([...selectedDataSources, newDs])
+    setSelectedDataSources([...selectedDataSources, newDataSource])
     setShowDataSourceDropdown(false)
   }
-
   const handleRemoveDataSource = (index: number) => {
     setSelectedDataSources(selectedDataSources.filter((_, i) => i !== index))
   }

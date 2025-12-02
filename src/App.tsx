@@ -73,12 +73,7 @@ function App() {
       )}
 
       {view === 'edit' && (
-        <EditTemplatePage
-          template={editingTemplate}
-          isNew={isNewTemplate}
-          onSave={handleSaveTemplate}
-          onCancel={handleCancelEdit}
-        />
+        <EditTemplatePage template={editingTemplate} onSave={handleSaveTemplate} onCancel={handleCancelEdit} />
       )}
 
       {generatingTemplate && (
