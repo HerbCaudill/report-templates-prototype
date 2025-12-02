@@ -82,7 +82,7 @@ export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditT
     if (fileName) {
       const extension = fileName.split('.').pop()?.toLowerCase()
       if (extension === 'docx' || extension === 'xlsx' || extension === 'pptx') {
-        const newFile = { name: fileName, type: extension }
+        const newFile = { name: fileName, type: extension as 'docx' | 'xlsx' | 'pptx' }
         setTemplateFile(newFile)
         saveChanges({ templateFile: newFile })
       } else {
