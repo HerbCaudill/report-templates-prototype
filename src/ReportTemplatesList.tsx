@@ -34,7 +34,7 @@ export function ReportTemplatesList({ templates, onEdit, onGenerate, onNewTempla
               </button>
               <button
                 type="button"
-                className="rounded-md bg-black px-3 py-1.5 text-sm text-white hover:bg-gray-800"
+                className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
                 onClick={() => onGenerate(template)}
               >
                 Generate

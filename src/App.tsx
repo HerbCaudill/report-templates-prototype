@@ -2,11 +2,14 @@ import { useState } from 'react'
 import type { ReportTemplate } from './types'
 import { initialTemplates } from './mockData'
 import { ReportTemplatesList } from './ReportTemplatesList'
-import { EditTemplateDialog } from './EditTemplateDialog'
+import { EditTemplatePage } from './EditTemplatePage'
 import { GenerateReportDialog } from './GenerateReportDialog'
+
+type View = 'list' | 'edit'
 
 function App() {
   const [templates, setTemplates] = useState<ReportTemplate[]>(initialTemplates)
+  const [view, setView] = useState<View>('list')
   const [editingTemplate, setEditingTemplate] = useState<ReportTemplate | null>(null)
   const [isNewTemplate, setIsNewTemplate] = useState(false)
   const [generatingTemplate, setGeneratingTemplate] = useState<ReportTemplate | null>(null)
@@ -14,11 +17,13 @@ function App() {
   const handleEdit = (template: ReportTemplate) => {
     setEditingTemplate(template)
     setIsNewTemplate(false)
+    setView('edit')
   }
 
   const handleNewTemplate = () => {
     setEditingTemplate(null)
     setIsNewTemplate(true)
+    setView('edit')
   }
 
   const handleSaveTemplate = (template: ReportTemplate) => {
@@ -29,11 +34,13 @@ function App() {
     }
     setEditingTemplate(null)
     setIsNewTemplate(false)
+    setView('list')
   }
 
-  const handleCloseEdit = () => {
+  const handleCancelEdit = () => {
     setEditingTemplate(null)
     setIsNewTemplate(false)
+    setView('list')
   }
 
   const handleGenerate = (template: ReportTemplate) => {
@@ -56,19 +63,21 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white p-8">
-      <ReportTemplatesList
-        templates={templates}
-        onEdit={handleEdit}
-        onGenerate={handleGenerate}
-        onNewTemplate={handleNewTemplate}
-      />
+      {view === 'list' && (
+        <ReportTemplatesList
+          templates={templates}
+          onEdit={handleEdit}
+          onGenerate={handleGenerate}
+          onNewTemplate={handleNewTemplate}
+        />
+      )}
 
-      {(editingTemplate || isNewTemplate) && (
-        <EditTemplateDialog
+      {view === 'edit' && (
+        <EditTemplatePage
           template={editingTemplate}
           isNew={isNewTemplate}
           onSave={handleSaveTemplate}
-          onClose={handleCloseEdit}
+          onCancel={handleCancelEdit}
         />
       )}
 
