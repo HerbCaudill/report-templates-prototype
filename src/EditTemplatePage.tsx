@@ -79,11 +79,11 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
   }
 
   return (
-    <div className="w-[400px]">
-      <h2 className="mb-5 text-base font-semibold text-gray-800">Edit report template</h2>
+    <div className="w-[550px]">
+      <h2 className="mb-8 text-base font-semibold text-gray-800">Edit report template</h2>
 
-      <div className="mb-5">
-        <label htmlFor="template-name" className="mb-1.5 block text-xs font-medium text-gray-500">
+      <div className="mb-8">
+        <label htmlFor="template-name" className="mb-2 block text-sm font-semibold text-gray-700">
           Name
         </label>
         <input
@@ -96,14 +96,14 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
         />
       </div>
 
-      <div className="mb-5">
-        <label className="mb-1.5 block text-xs font-medium text-gray-500">Data sources</label>
+      <div className="mb-8">
+        <label className="mb-2 block text-sm font-semibold text-gray-700">Data sources</label>
         {selectedDataSources.length > 0 && (
           <table className="mb-3 w-full border-collapse text-[13px]">
             <thead>
               <tr>
-                <th className="border-b border-gray-200 p-2 text-left font-medium text-gray-500">Name</th>
-                <th className="border-b border-gray-200 p-2 text-left font-medium text-gray-500">Key</th>
+                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Name</th>
+                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Key</th>
                 <th className="border-b border-gray-200 p-2"></th>
               </tr>
             </thead>
@@ -165,8 +165,8 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
         </div>
       </div>
 
-      <div className="mb-5">
-        <label className="mb-1.5 block text-xs font-medium text-gray-500">Template</label>
+      <div className="mb-8">
+        <label className="mb-2 block text-sm font-semibold text-gray-700">Template</label>
         {templateFile ? (
           <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
             <WordIcon />
@@ -190,7 +190,7 @@ export function EditTemplatePage({ template, isNew, onSave, onCancel }: EditTemp
         )}
       </div>
 
-      <div className="mt-6 flex gap-2">
+      <div className="mt-10 flex gap-2">
         <button
           type="button"
           className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"

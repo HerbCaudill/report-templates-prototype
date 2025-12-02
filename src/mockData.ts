@@ -2,7 +2,7 @@ import type { DataSource, Project, ReportingPeriod, ReportTemplate } from './typ
 
 export const dataSources: DataSource[] = [
   // Projects
-  { id: 'ds-1', type: 'projects-multiple', label: 'Multiple projects', category: 'Projects' },
+  { id: 'ds-1', type: 'projects-all', label: 'All projects', category: 'Projects' },
   { id: 'ds-2', type: 'projects-single', label: 'Single project', category: 'Projects' },
   {
     id: 'ds-3',
@@ -11,7 +11,7 @@ export const dataSources: DataSource[] = [
     category: 'Projects',
   },
   // Indicators
-  { id: 'ds-4', type: 'indicators-multiple', label: 'Multiple indicators', category: 'Indicators' },
+  { id: 'ds-4', type: 'indicators-all', label: 'All indicators', category: 'Indicators' },
   { id: 'ds-5', type: 'indicators-single', label: 'Single indicator', category: 'Indicators' },
   // Data tables
   { id: 'ds-6', type: 'data-table', label: 'Journalist trainings', category: 'Data tables' },
@@ -40,12 +40,12 @@ export const reportingPeriods: ReportingPeriod[] = [
 export const initialTemplates: ReportTemplate[] = [
   {
     id: 'tpl-1',
-    name: 'PRT report',
+    name: 'XYZ report',
     dataSources: [
       { dataSourceId: 'ds-3', key: 'project' },
       { dataSourceId: 'ds-6', key: 'trainings' },
     ],
-    templateFile: { name: 'PRT template.docx', type: 'docx' },
+    templateFile: { name: 'XYZ template.docx', type: 'docx' },
   },
   {
     id: 'tpl-2',

@@ -1,8 +1,8 @@
 export type DataSourceType =
-  | 'projects-multiple'
+  | 'projects-all'
   | 'projects-single'
   | 'projects-single-reporting-period'
-  | 'indicators-multiple'
+  | 'indicators-all'
   | 'indicators-single'
   | 'data-table'
   | 'saved-report'
