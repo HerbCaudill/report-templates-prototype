@@ -60,7 +60,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
           <select
             value={reportingPeriodId}
             onChange={e => setReportingPeriodId(e.target.value)}
-            className="w-full cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-size-[12px] bg-[right_12px_center] bg-no-repeat px-3 py-2.5 pr-8 text-sm focus:border-black focus:outline-none"
+            className="w-full cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-size-[12px] bg-position-[right_12px_center] bg-no-repeat px-3 py-2.5 pr-8 text-sm focus:border-black focus:outline-none"
           >
             <option value="">Choose reporting period...</option>
             {reportingPeriods.map(period => (

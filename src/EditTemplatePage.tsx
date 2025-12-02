@@ -114,7 +114,7 @@ export function EditTemplatePage({ template, onSave, onCancel }: EditTemplatePag
                       type="text"
                       value={ds.key}
                       onChange={e => handleKeyChange(index, e.target.value)}
-                      className="w-20 rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
+                      className="w-full rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
                     />
                   </td>
                   <td className="border-b border-gray-200 p-2">
