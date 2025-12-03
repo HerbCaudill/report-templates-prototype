@@ -62,13 +62,11 @@ function App() {
   }
 
   const handleDeleteTemplate = (template: ReportTemplate) => {
-    if (confirm(`Delete "${template.name}"?`)) {
-      setTemplates(templates.filter(t => t.id !== template.id))
-      setEditingTemplate(null)
-      setIsNewTemplate(false)
-      setView('list')
-      window.history.back()
-    }
+    setTemplates(templates.filter(t => t.id !== template.id))
+    setEditingTemplate(null)
+    setIsNewTemplate(false)
+    setView('list')
+    window.history.back()
   }
 
   const handleGenerateReport = (options: {
