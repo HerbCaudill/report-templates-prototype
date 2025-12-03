@@ -11,7 +11,7 @@ type ReportTemplatesListProps = {
 export function ReportTemplatesList({ templates, onEdit, onGenerate, onNewTemplate }: ReportTemplatesListProps) {
   return (
     <div className="w-lg">
-      <h2 className="text-sm font-semibold text-gray-800 mb-3">Report templates</h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">Report templates</h2>
       <div className="flex flex-col divide-y divide-gray-200 border-y border-gray-200 mb-4">
         {templates.map(template => (
           <div key={template.id} className="flex items-center gap-3 py-2.5">

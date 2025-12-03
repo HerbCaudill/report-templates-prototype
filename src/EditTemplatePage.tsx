@@ -120,7 +120,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
 
   return (
     <div className="w-[550px]">
-      <h2 className="mb-8 text-base font-semibold text-gray-800">
+      <h2 className="mb-8 text-xl font-semibold text-gray-800">
         {isNew ? 'New report template' : 'Edit report template'}
       </h2>
 
