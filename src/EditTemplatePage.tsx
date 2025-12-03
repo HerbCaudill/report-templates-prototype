@@ -15,6 +15,7 @@ type EditTemplatePageProps = {
 export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete, onDone }: EditTemplatePageProps) {
   const [id] = useState(template?.id ?? `tpl-${Date.now()}`)
   const [name, setName] = useState(template?.name ?? '')
+  const [description, setDescription] = useState(template?.description ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
@@ -22,6 +23,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
 
   const saveChanges = (updates: {
     name?: string
+    description?: string
     dataSources?: TemplateDataSource[]
     templateFile?: TemplateFile | null
   }) => {
@@ -30,6 +32,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
       onChange({
         id,
         name: updates.name ?? name,
+        description: updates.description ?? description,
         dataSources: updates.dataSources ?? selectedDataSources,
         templateFile: updates.templateFile !== undefined ? updates.templateFile : templateFile,
       })
@@ -84,6 +87,13 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
     }
   }
 
+  const handleDescriptionChange = (newDescription: string) => {
+    setDescription(newDescription)
+    if (hasBeenCreated) {
+      saveChanges({ description: newDescription })
+    }
+  }
+
   const handleFileUpload = () => {
     // Simulate file upload
     const fileName = prompt('Enter template filename (e.g., template.docx):')
@@ -130,6 +140,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
       onCreate({
         id,
         name,
+        description,
         dataSources: selectedDataSources,
         templateFile,
       })
@@ -154,6 +165,20 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
           value={name}
           onChange={e => handleNameChange(e.target.value)}
           placeholder="Template name"
+          className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
+        />
+      </div>
+
+      <div className="mb-8">
+        <label htmlFor="template-description" className="mb-2 block text-sm font-semibold text-gray-700">
+          Description
+        </label>
+        <textarea
+          id="template-description"
+          value={description}
+          onChange={e => handleDescriptionChange(e.target.value)}
+          placeholder="Optional description for this template"
+          rows={5}
           className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
         />
       </div>
@@ -265,6 +290,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
               onDelete({
                 id,
                 name,
+                description,
                 dataSources: selectedDataSources,
                 templateFile,
               })

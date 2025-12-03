@@ -18,6 +18,7 @@ export type TemplateFile = {
 export type ReportTemplate = {
   id: string
   name: string
+  description: string
   dataSources: TemplateDataSource[]
   templateFile: TemplateFile | null
 }
