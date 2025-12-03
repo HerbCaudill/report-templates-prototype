@@ -120,18 +120,12 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
   }
 
   const handleFileUpload = () => {
-    // Simulate file upload
-    const fileName = prompt('Enter template filename (e.g., template.docx):')
-    if (fileName) {
-      const extension = fileName.split('.').pop()?.toLowerCase()
-      if (extension === 'docx' || extension === 'xlsx' || extension === 'pptx') {
-        const newFile = { name: fileName, type: extension as 'docx' | 'xlsx' | 'pptx' }
-        setTemplateFile(newFile)
-        saveChanges({ templateFile: newFile })
-      } else {
-        alert('Please use .docx, .xlsx, or .pptx files')
-      }
-    }
+    // Simulate file upload - auto-generate filename based on template name
+    const baseName = name.trim() || 'Template'
+    const fileName = `${baseName}.docx`
+    const newFile = { name: fileName, type: 'docx' as const }
+    setTemplateFile(newFile)
+    saveChanges({ templateFile: newFile })
   }
 
   const getDataSourceLabel = (dataSourceId: string) => {
