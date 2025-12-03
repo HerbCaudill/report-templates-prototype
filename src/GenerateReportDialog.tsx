@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { OutputFormat, ReportTemplate } from './types'
 import { projects, reportingPeriods, indicators } from './mockData'
 import { SealIcon } from './icons'
+import { InfoTooltip } from './InfoTooltip'
 
 type GenerateReportDialogProps = {
   template: ReportTemplate
@@ -148,6 +149,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
                 className="size-4.5 accent-black"
               />
               <span>Certify</span>
+              <InfoTooltip text="Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution." />
             </label>
           )}
           {certify && (
