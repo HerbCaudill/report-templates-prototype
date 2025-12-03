@@ -51,7 +51,7 @@ export const initialTemplates: ReportTemplate[] = [
   {
     id: 'tpl-2',
     name: 'QRS report',
-    dataSources: [],
+    dataSources: [{ dataSourceId: 'projects-single-reporting-period', key: 'project' }],
     templateFile: { name: 'QRS template.docx', type: 'docx' },
   },
   {

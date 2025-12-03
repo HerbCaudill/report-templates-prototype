@@ -103,6 +103,26 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
     return dataSources.find(ds => ds.id === dataSourceId)?.label ?? 'Unknown'
   }
 
+  const getDataSourceCategory = (dataSourceId: string) => {
+    return dataSources.find(ds => ds.id === dataSourceId)?.category
+  }
+
+  // Categories that only allow one item
+  const singleSelectCategories = ['Projects', 'Indicators']
+
+  // Get categories that are already selected and limited to one
+  const selectedSingleSelectCategories = selectedDataSources
+    .map(ds => getDataSourceCategory(ds.dataSourceId))
+    .filter((cat): cat is string => cat !== undefined && singleSelectCategories.includes(cat))
+
+  // Check if a data source can be added
+  const canAddDataSource = (ds: DataSource) => {
+    if (singleSelectCategories.includes(ds.category)) {
+      return !selectedSingleSelectCategories.includes(ds.category)
+    }
+    return true
+  }
+
   const isValid = name.trim() !== '' && selectedDataSources.length > 0 && templateFile !== null
 
   const handleDone = () => {
@@ -187,21 +207,25 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
           </button>
           {showDataSourceDropdown && (
             <div className="absolute left-0 right-0 top-full z-10 max-h-[300px] overflow-y-auto rounded border border-gray-200 bg-white shadow-lg">
-              {Object.entries(groupedDataSources).map(([category, sources]) => (
-                <div key={category} className="border-b border-gray-100 last:border-b-0">
-                  <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase text-gray-500">{category}</div>
-                  {sources.map(ds => (
-                    <button
-                      key={ds.id}
-                      type="button"
-                      className="block w-full bg-transparent px-5 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
-                      onClick={() => handleAddDataSource(ds)}
-                    >
-                      {ds.label}
-                    </button>
-                  ))}
-                </div>
-              ))}
+              {Object.entries(groupedDataSources).map(([category, sources]) => {
+                const availableSources = sources.filter(ds => canAddDataSource(ds))
+                if (availableSources.length === 0) return null
+                return (
+                  <div key={category} className="border-b border-gray-100 last:border-b-0">
+                    <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase text-gray-500">{category}</div>
+                    {availableSources.map(ds => (
+                      <button
+                        key={ds.id}
+                        type="button"
+                        className="block w-full bg-transparent px-5 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
+                        onClick={() => handleAddDataSource(ds)}
+                      >
+                        {ds.label}
+                      </button>
+                    ))}
+                  </div>
+                )
+              })}
             </div>
           )}
         </div>
