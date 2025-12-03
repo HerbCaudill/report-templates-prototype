@@ -1,4 +1,4 @@
-import type { DataSource, Project, ReportingPeriod, ReportTemplate } from './types'
+import type { DataSource, Indicator, Project, ReportingPeriod, ReportTemplate } from './types'
 
 export const dataSources: DataSource[] = [
   // Projects
@@ -28,6 +28,14 @@ export const projects: Project[] = [
   { id: 'proj-5', name: 'Infrastructure Improvement' },
 ]
 
+export const indicators: Indicator[] = [
+  { id: 'ind-1', name: 'Number of beneficiaries reached' },
+  { id: 'ind-2', name: 'Training sessions completed' },
+  { id: 'ind-3', name: 'Wells constructed' },
+  { id: 'ind-4', name: 'Students enrolled' },
+  { id: 'ind-5', name: 'Healthcare visits' },
+]
+
 export const reportingPeriods: ReportingPeriod[] = [
   { id: 'rp-2', name: 'Q2 2024' },
   { id: 'rp-3', name: 'Q3 2024' },
@@ -51,7 +59,7 @@ export const initialTemplates: ReportTemplate[] = [
   {
     id: 'tpl-2',
     name: 'QRS report',
-    dataSources: [{ dataSourceId: 'projects-single-reporting-period', key: 'project' }],
+    dataSources: [{ dataSourceId: 'projects-single', key: 'project' }],
     templateFile: { name: 'QRS template.docx', type: 'docx' },
   },
   {
@@ -59,5 +67,17 @@ export const initialTemplates: ReportTemplate[] = [
     name: 'Indicator information report',
     dataSources: [{ dataSourceId: 'indicators-single', key: 'indicator' }],
     templateFile: { name: 'Indicator information report.docx', type: 'docx' },
+  },
+  {
+    id: 'tpl-4',
+    name: 'Indicator list',
+    dataSources: [{ dataSourceId: 'indicators-all', key: 'indicators' }],
+    templateFile: { name: 'Indicator list.docx', type: 'docx' },
+  },
+  {
+    id: 'tpl-5',
+    name: 'Project list',
+    dataSources: [{ dataSourceId: 'projects-all', key: 'projects' }],
+    templateFile: { name: 'Project list.docx', type: 'docx' },
   },
 ]

@@ -21,3 +21,11 @@ export function CheckIcon() {
     </svg>
   )
 }
+
+export function SealIcon() {
+  return (
+    <svg className="size-5" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 1l2.5 5.5L20 7l-4 4.5 1 5.5-5-3-5 3 1-5.5L4 7l5.5-.5L12 1z" />
+    </svg>
+  )
+}

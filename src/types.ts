@@ -27,6 +27,11 @@ export type Project = {
   name: string
 }
 
+export type Indicator = {
+  id: string
+  name: string
+}
+
 export type ReportingPeriod = {
   id: string
   name: string
