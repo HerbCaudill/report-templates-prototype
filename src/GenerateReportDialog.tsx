@@ -170,7 +170,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
               ) : (
                 <button
                   type="button"
-                  className="mt-3 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+                  className="mt-3 w-full rounded-md bg-black px-3 py-1.5 text-sm text-white hover:bg-gray-800"
                   onClick={() => setIsCertified(true)}
                 >
                   Certify
