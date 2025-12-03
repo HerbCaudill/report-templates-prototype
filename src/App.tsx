@@ -115,12 +115,6 @@ function App() {
     certify: boolean
   }) => {
     console.log('Generating report with options:', options)
-    const parts = []
-    if (options.projectId) parts.push(`Project: ${options.projectId}`)
-    if (options.reportingPeriodId) parts.push(`Period: ${options.reportingPeriodId}`)
-    if (options.indicatorId) parts.push(`Indicator: ${options.indicatorId}`)
-    parts.push(`Format: ${options.outputFormat}`)
-    alert(`Report generated!\n\n${parts.join('\n')}`)
     setGeneratingTemplate(null)
   }
 
