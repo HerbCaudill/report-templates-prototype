@@ -52,7 +52,7 @@ export const initialTemplates: ReportTemplate[] = [
     id: 'tpl-2',
     name: 'QRS report',
     dataSources: [],
-    templateFile: null,
+    templateFile: { name: 'QRS template.docx', type: 'docx' },
   },
   {
     id: 'tpl-3',

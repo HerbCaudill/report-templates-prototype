@@ -5,29 +5,35 @@ import { WordIcon, TrashIcon, CheckIcon } from './icons'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
+  isNew: boolean
   onChange: (template: ReportTemplate) => void
+  onCreate: (template: ReportTemplate) => void
   onDelete: (template: ReportTemplate) => void
   onDone: () => void
 }
 
-export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditTemplatePageProps) {
+export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete, onDone }: EditTemplatePageProps) {
   const [id] = useState(template?.id ?? `tpl-${Date.now()}`)
   const [name, setName] = useState(template?.name ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
+  const [hasBeenCreated, setHasBeenCreated] = useState(!isNew)
 
   const saveChanges = (updates: {
     name?: string
     dataSources?: TemplateDataSource[]
     templateFile?: TemplateFile | null
   }) => {
-    onChange({
-      id,
-      name: updates.name ?? name,
-      dataSources: updates.dataSources ?? selectedDataSources,
-      templateFile: updates.templateFile !== undefined ? updates.templateFile : templateFile,
-    })
+    // Only autosave if we're editing an existing record
+    if (hasBeenCreated) {
+      onChange({
+        id,
+        name: updates.name ?? name,
+        dataSources: updates.dataSources ?? selectedDataSources,
+        templateFile: updates.templateFile !== undefined ? updates.templateFile : templateFile,
+      })
+    }
   }
 
   // Group data sources by category
@@ -73,7 +79,9 @@ export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditT
 
   const handleNameChange = (newName: string) => {
     setName(newName)
-    saveChanges({ name: newName })
+    if (hasBeenCreated) {
+      saveChanges({ name: newName })
+    }
   }
 
   const handleFileUpload = () => {
@@ -95,9 +103,26 @@ export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditT
     return dataSources.find(ds => ds.id === dataSourceId)?.label ?? 'Unknown'
   }
 
+  const isValid = name.trim() !== '' && selectedDataSources.length > 0 && templateFile !== null
+
+  const handleDone = () => {
+    if (isNew && !hasBeenCreated && isValid) {
+      onCreate({
+        id,
+        name,
+        dataSources: selectedDataSources,
+        templateFile,
+      })
+      setHasBeenCreated(true)
+    }
+    onDone()
+  }
+
   return (
     <div className="w-[550px]">
-      <h2 className="mb-8 text-base font-semibold text-gray-800">Edit report template</h2>
+      <h2 className="mb-8 text-base font-semibold text-gray-800">
+        {isNew ? 'New report template' : 'Edit report template'}
+      </h2>
 
       <div className="mb-8">
         <label htmlFor="template-name" className="mb-2 block text-sm font-semibold text-gray-700">
@@ -208,11 +233,18 @@ export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditT
       </div>
 
       <div className="mt-10 flex items-center">
-        {template && (
+        {hasBeenCreated && (
           <button
             type="button"
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
-            onClick={() => onDelete(template)}
+            onClick={() =>
+              onDelete({
+                id,
+                name,
+                dataSources: selectedDataSources,
+                templateFile,
+              })
+            }
           >
             <TrashIcon />
             Delete this report template
@@ -220,8 +252,11 @@ export function EditTemplatePage({ template, onChange, onDelete, onDone }: EditT
         )}
         <button
           type="button"
-          className="ml-auto flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-          onClick={onDone}
+          className={`ml-auto flex items-center gap-1.5 rounded-md px-4 py-2 text-sm ${
+            isValid ? 'bg-black text-white hover:bg-gray-800' : 'cursor-not-allowed bg-gray-200 text-gray-400'
+          }`}
+          onClick={handleDone}
+          disabled={!isValid}
         >
           <CheckIcon />
           Done
