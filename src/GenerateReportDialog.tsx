@@ -33,11 +33,10 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
   const needsIndicator = dataSourceIds.includes('indicators-single')
 
   // Validation
-  const isValid =
-    (!needsProject || projectId) &&
-    (!needsReportingPeriod || reportingPeriodId) &&
-    (!needsIndicator || indicatorId) &&
-    (!certify || isCertified)
+  const requiredFieldsFilled =
+    (!needsProject || projectId) && (!needsReportingPeriod || reportingPeriodId) && (!needsIndicator || indicatorId)
+
+  const isValid = requiredFieldsFilled && (!certify || isCertified)
 
   const handleGenerate = () => {
     onGenerate({
@@ -141,7 +140,11 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
 
         <div className="mb-5">
           {!isCertified && (
-            <label className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-800">
+            <label
+              className={`flex items-center gap-2.5 text-sm ${
+                requiredFieldsFilled ? 'cursor-pointer text-gray-800' : 'cursor-not-allowed text-gray-400'
+              }`}
+            >
               <input
                 type="checkbox"
                 checked={certify}
@@ -149,7 +152,8 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
                   setCertify(e.target.checked)
                   if (!e.target.checked) setIsCertified(false)
                 }}
-                className="size-4.5 accent-black"
+                disabled={!requiredFieldsFilled}
+                className="size-4.5 accent-black disabled:opacity-50"
               />
               <span>Certify</span>
               <InfoTooltip text="Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution." />
