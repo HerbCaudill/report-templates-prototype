@@ -133,6 +133,9 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
               className="size-4.5 accent-black"
             />
             <span>Save to documents</span>
+            <InfoTooltip
+              text={`In addition to downloading the report, it will be saved in the system document library in the "${template.name}" folder.`}
+            />
           </label>
         </div>
 
