@@ -287,7 +287,10 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
       </div>
 
       <div className="mb-8">
-        <label className="mb-2 block text-sm font-semibold text-gray-700">Template</label>
+        <label className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
+          Template
+          <InfoTooltip text="Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports." />
+        </label>
         {templateFile ? (
           <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
             <WordIcon />
