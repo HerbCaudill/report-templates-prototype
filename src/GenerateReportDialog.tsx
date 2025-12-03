@@ -39,7 +39,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <div className="w-[350px] max-w-[90vw] rounded-lg bg-white p-6 shadow-xl" onClick={e => e.stopPropagation()}>
-        <h2 className="mb-5 text-base font-semibold text-gray-800">Generate {template.name}</h2>
+        <h2 className="mb-5 text-base font-semibold text-gray-800">{template.name}</h2>
 
         <div className="mb-5">
           <select

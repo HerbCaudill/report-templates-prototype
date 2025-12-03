@@ -56,8 +56,8 @@ export const initialTemplates: ReportTemplate[] = [
   },
   {
     id: 'tpl-3',
-    name: 'Indicator definition',
+    name: 'Indicator information report',
     dataSources: [{ dataSourceId: 'indicators-single', key: 'indicator' }],
-    templateFile: { name: 'Indicator definition.docx', type: 'docx' },
+    templateFile: { name: 'Indicator information report.docx', type: 'docx' },
   },
 ]

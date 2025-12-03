@@ -14,22 +14,59 @@ function App() {
   const [isNewTemplate, setIsNewTemplate] = useState(false)
   const [generatingTemplate, setGeneratingTemplate] = useState<ReportTemplate | null>(null)
 
+  // Handle initial URL on page load
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash === '#new') {
+      setIsNewTemplate(true)
+      setEditingTemplate(null)
+      setView('edit')
+    } else if (hash.startsWith('#edit/')) {
+      const templateId = hash.replace('#edit/', '')
+      const template = initialTemplates.find(t => t.id === templateId)
+      if (template) {
+        setEditingTemplate(template)
+        setIsNewTemplate(false)
+        setView('edit')
+      }
+    }
+  }, [])
+
   useEffect(() => {
     const handlePopState = () => {
-      setView('list')
-      setEditingTemplate(null)
-      setIsNewTemplate(false)
+      const hash = window.location.hash
+      if (hash === '#new') {
+        setIsNewTemplate(true)
+        setEditingTemplate(null)
+        setView('edit')
+      } else if (hash.startsWith('#edit/')) {
+        const templateId = hash.replace('#edit/', '')
+        const template = templates.find(t => t.id === templateId)
+        if (template) {
+          setEditingTemplate(template)
+          setIsNewTemplate(false)
+          setView('edit')
+        } else {
+          setView('list')
+          setEditingTemplate(null)
+          setIsNewTemplate(false)
+        }
+      } else {
+        setView('list')
+        setEditingTemplate(null)
+        setIsNewTemplate(false)
+      }
     }
 
     window.addEventListener('popstate', handlePopState)
     return () => window.removeEventListener('popstate', handlePopState)
-  }, [])
+  }, [templates])
 
   const handleEdit = (template: ReportTemplate) => {
     setEditingTemplate(template)
     setIsNewTemplate(false)
     setView('edit')
-    window.history.pushState({ view: 'edit' }, '', '#edit')
+    window.history.pushState({ view: 'edit', id: template.id }, '', `#edit/${template.id}`)
   }
 
   const handleNewTemplate = () => {
