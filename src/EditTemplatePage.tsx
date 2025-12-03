@@ -1,7 +1,32 @@
 import { useState } from 'react'
 import type { DataSource, ReportTemplate, TemplateDataSource, TemplateFile } from './types'
 import { dataSources } from './mockData'
-import { WordIcon, TrashIcon, CheckIcon } from './icons'
+import { WordIcon, TrashIcon, CheckIcon, InfoIcon } from './icons'
+
+function InfoTooltip({ text }: { text: string }) {
+  const [isVisible, setIsVisible] = useState(false)
+
+  return (
+    <span className="relative inline-flex items-center">
+      <button
+        type="button"
+        className="text-gray-400 hover:text-gray-600"
+        onMouseEnter={() => setIsVisible(true)}
+        onMouseLeave={() => setIsVisible(false)}
+        onFocus={() => setIsVisible(true)}
+        onBlur={() => setIsVisible(false)}
+      >
+        <InfoIcon className="size-3.5" />
+      </button>
+      {isVisible && (
+        <div className="absolute bottom-full left-1/2 z-20 mb-2 w-48 -translate-x-1/2 rounded bg-gray-800 px-2 py-1.5 text-xs font-normal text-white shadow-lg">
+          {text}
+          <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-800" />
+        </div>
+      )}
+    </span>
+  )
+}
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
@@ -123,7 +148,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
   // Get categories that are already selected and limited to one
   const selectedSingleSelectCategories = selectedDataSources
     .map(ds => getDataSourceCategory(ds.dataSourceId))
-    .filter((cat): cat is string => cat !== undefined && singleSelectCategories.includes(cat))
+    .filter(cat => cat !== undefined && singleSelectCategories.includes(cat))
 
   // Check if a data source can be added
   const canAddDataSource = (ds: DataSource) => {
@@ -189,8 +214,13 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
           <table className="mb-3 w-full border-collapse text-[13px]">
             <thead>
               <tr>
-                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Name</th>
-                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Key</th>
+                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Type</th>
+                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">
+                  <span className="flex items-center gap-1">
+                    Key
+                    <InfoTooltip text="This key must match the placeholder tags in your template file." />
+                  </span>
+                </th>
                 <th className="border-b border-gray-200 p-2"></th>
               </tr>
             </thead>
