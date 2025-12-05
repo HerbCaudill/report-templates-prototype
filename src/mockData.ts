@@ -83,12 +83,4 @@ export const initialTemplates: ReportTemplate[] = [
     dataSources: [{ dataSourceId: 'indicators-all', key: 'indicators' }],
     templateFile: { name: 'Indicator list.docx', type: 'docx' },
   },
-  {
-    id: 'tpl-5',
-    name: 'Project list',
-    description: 'Overview of all active projects',
-    group: 'Required reporting',
-    dataSources: [{ dataSourceId: 'projects-all', key: 'projects' }],
-    templateFile: { name: 'Project list.docx', type: 'docx' },
-  },
 ]

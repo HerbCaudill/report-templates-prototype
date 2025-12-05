@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import type { DataSource, ReportTemplate, TemplateDataSource, TemplateFile } from './types'
 import { dataSources } from './mockData'
-import { WordIcon, TrashIcon, CheckIcon } from './icons'
+import { WordIcon, TrashIcon, CheckIcon, DownloadIcon } from './icons'
 import { InfoTooltip } from './InfoTooltip'
 
 type EditTemplatePageProps = {
@@ -363,6 +363,14 @@ export function EditTemplatePage({
             <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
               <WordIcon />
               <span className="flex-1 text-sm text-gray-800">{templateFile?.name}</span>
+              <a
+                href={`/templates/${templateFile?.name}`}
+                download={templateFile?.name}
+                className="flex items-center gap-1 rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+              >
+                <DownloadIcon />
+                Download
+              </a>
               <button
                 type="button"
                 className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
