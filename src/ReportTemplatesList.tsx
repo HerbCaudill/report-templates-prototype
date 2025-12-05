@@ -65,7 +65,7 @@ export function ReportTemplatesList({ templates, onEdit, onGenerate, onNewTempla
 
   return (
     <div className="w-lg">
-      <h2 className="mb-4 text-xl font-semibold text-gray-800">Report templates</h2>
+      <h2 className="mb-4 text-3xl font-semibold text-gray-800">Report templates</h2>
       <div className="mb-4">
         {sortedGroups.map(groupName => (
           <div key={groupName} className="mb-6 last:mb-0">
