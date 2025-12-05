@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import type { ReportTemplate } from './types'
+import type { ReportTemplate, TemplateFile } from './types'
 import { initialTemplates } from './mockData'
 import { ReportTemplatesList } from './ReportTemplatesList'
 import { EditTemplatePage } from './EditTemplatePage'
@@ -69,11 +69,22 @@ function App() {
     window.history.pushState({ view: 'edit', id: template.id }, '', `#edit/${template.id}`)
   }
 
-  const handleNewTemplate = () => {
-    setEditingTemplate(null)
-    setIsNewTemplate(true)
+  const handleUploadNewTemplate = (file: TemplateFile) => {
+    // Derive template name from filename (remove extension)
+    const derivedName = file.name.replace(/\.(docx|xlsx|pptx)$/i, '')
+    const newTemplate: ReportTemplate = {
+      id: `tpl-${Date.now()}`,
+      name: derivedName,
+      description: '',
+      group: '',
+      dataSources: [],
+      templateFile: file,
+    }
+    setTemplates([...templates, newTemplate])
+    setEditingTemplate(newTemplate)
+    setIsNewTemplate(false)
     setView('edit')
-    window.history.pushState({ view: 'edit' }, '', '#new')
+    window.history.pushState({ view: 'edit', id: newTemplate.id }, '', `#edit/${newTemplate.id}`)
   }
 
   const handleTemplateChange = (template: ReportTemplate) => {
@@ -128,7 +139,7 @@ function App() {
           templates={templates}
           onEdit={handleEdit}
           onGenerate={handleGenerate}
-          onNewTemplate={handleNewTemplate}
+          onUploadNewTemplate={handleUploadNewTemplate}
         />
       )}
 

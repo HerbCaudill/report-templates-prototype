@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { DataSource, ReportTemplate, TemplateDataSource, TemplateFile } from './types'
 import { dataSources } from './mockData'
 import { WordIcon, TrashIcon, CheckIcon } from './icons'
@@ -31,6 +31,7 @@ export function EditTemplatePage({
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
   const [hasBeenCreated, setHasBeenCreated] = useState(!isNew)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const saveChanges = (updates: {
     name?: string
@@ -114,22 +115,21 @@ export function EditTemplatePage({
     }
   }
 
-  const handleFileUpload = () => {
-    // Simulate file upload - prompt for filename to simulate file picker
-    const fileName = prompt('Enter template filename (e.g., Quarterly Report.docx):')
-    if (!fileName) return
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
 
-    const extension = fileName.split('.').pop()?.toLowerCase()
+    const extension = file.name.split('.').pop()?.toLowerCase()
     if (extension !== 'docx' && extension !== 'xlsx' && extension !== 'pptx') {
       alert('Please use .docx, .xlsx, or .pptx files')
       return
     }
 
-    const newFile = { name: fileName, type: extension as 'docx' | 'xlsx' | 'pptx' }
+    const newFile = { name: file.name, type: extension as 'docx' | 'xlsx' | 'pptx' }
     setTemplateFile(newFile)
 
     // Derive template name from filename (remove extension)
-    const derivedName = fileName.replace(/\.(docx|xlsx|pptx)$/i, '')
+    const derivedName = file.name.replace(/\.(docx|xlsx|pptx)$/i, '')
     if (!name.trim()) {
       setName(derivedName)
     }
@@ -150,6 +150,9 @@ export function EditTemplatePage({
     } else {
       saveChanges({ templateFile: newFile })
     }
+
+    // Reset the input so the same file can be selected again
+    e.target.value = ''
   }
 
   const getDataSourceLabel = (dataSourceId: string) => {
@@ -186,6 +189,9 @@ export function EditTemplatePage({
         {isNew && !hasBeenCreated ? 'New report template' : 'Edit report template'}
       </h2>
 
+      {/* Hidden file input used by both upload buttons */}
+      <input ref={fileInputRef} type="file" accept=".docx,.xlsx,.pptx" onChange={handleFileUpload} className="hidden" />
+
       {!hasBeenCreated ? (
         <div className="mb-8">
           <label className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
@@ -195,7 +201,7 @@ export function EditTemplatePage({
           <button
             type="button"
             className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-            onClick={handleFileUpload}
+            onClick={() => fileInputRef.current?.click()}
           >
             Upload template file...
           </button>
@@ -360,7 +366,7 @@ export function EditTemplatePage({
               <button
                 type="button"
                 className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-                onClick={handleFileUpload}
+                onClick={() => fileInputRef.current?.click()}
               >
                 Replace...
               </button>
