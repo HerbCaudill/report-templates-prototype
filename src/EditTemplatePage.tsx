@@ -81,6 +81,7 @@ export function EditTemplatePage({
     setShowDataSourceDropdown(false)
     saveChanges({ dataSources: updated })
   }
+
   const handleRemoveDataSource = (index: number) => {
     const updated = selectedDataSources.filter((_, i) => i !== index)
     setSelectedDataSources(updated)
@@ -179,10 +180,6 @@ export function EditTemplatePage({
     return true
   }
 
-  const handleDone = () => {
-    onDone()
-  }
-
   return (
     <div className="w-[550px]">
       <h2 className="mb-8 text-3xl font-semibold text-gray-800">
@@ -254,7 +251,7 @@ export function EditTemplatePage({
                     handleGroupChange(e.target.value)
                   }
                 }}
-                className="flex-1 cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat px-3 py-2 pr-8 text-sm focus:border-black focus:outline-none"
+                className="flex-1 cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-size-[12px] bg-position-[right_12px_center] bg-no-repeat px-3 py-2 pr-8 text-sm focus:border-black focus:outline-none"
               >
                 <option value="">No group</option>
                 {existingGroups.map(g => (
@@ -405,7 +402,7 @@ export function EditTemplatePage({
           <button
             type="button"
             className="ml-auto flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-            onClick={handleDone}
+            onClick={onDone}
           >
             <CheckIcon />
             Done
