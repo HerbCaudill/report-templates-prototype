@@ -13,6 +13,7 @@ export type TemplateDataSource = {
 export type TemplateFile = {
   name: string
   type: 'docx' | 'xlsx' | 'pptx'
+  url?: string // Blob URL for uploaded files, or path for static files
 }
 
 export type ReportTemplate = {

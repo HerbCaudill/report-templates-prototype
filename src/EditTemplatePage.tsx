@@ -119,7 +119,9 @@ export function EditTemplatePage({
       return
     }
 
-    const newFile = { name: file.name, type: extension as 'docx' | 'xlsx' | 'pptx' }
+    // Create a blob URL for the uploaded file so it can be downloaded later
+    const url = URL.createObjectURL(file)
+    const newFile = { name: file.name, type: extension as 'docx' | 'xlsx' | 'pptx', url }
     setTemplateFile(newFile)
 
     // Derive template name from filename (remove extension)
@@ -326,7 +328,7 @@ export function EditTemplatePage({
               <WordIcon />
               <span className="flex-1 text-sm text-gray-800">{templateFile?.name}</span>
               <a
-                href={`/templates/${templateFile?.name}`}
+                href={templateFile?.url}
                 download={templateFile?.name}
                 className="flex items-center gap-1 rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
               >

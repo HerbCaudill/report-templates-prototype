@@ -57,7 +57,7 @@ export const initialTemplates: ReportTemplate[] = [
       { dataSourceId: 'projects-single-reporting-period', key: 'project' },
       { dataSourceId: 'dt-1', key: 'trainings' },
     ],
-    templateFile: { name: 'XYZ template.docx', type: 'docx' },
+    templateFile: { name: 'XYZ template.docx', type: 'docx', url: '/templates/XYZ template.docx' },
   },
   {
     id: 'tpl-2',
@@ -65,7 +65,7 @@ export const initialTemplates: ReportTemplate[] = [
     description: 'Standard project summary report',
     group: 'Required reporting',
     dataSources: [{ dataSourceId: 'projects-single', key: 'project' }],
-    templateFile: { name: 'QRS template.docx', type: 'docx' },
+    templateFile: { name: 'QRS template.docx', type: 'docx', url: '/templates/QRS template.docx' },
   },
   {
     id: 'tpl-3',
@@ -73,7 +73,11 @@ export const initialTemplates: ReportTemplate[] = [
     description: 'Detailed information sheet for a single indicator',
     group: 'Reference information',
     dataSources: [{ dataSourceId: 'indicators-single', key: 'indicator' }],
-    templateFile: { name: 'Indicator information report.docx', type: 'docx' },
+    templateFile: {
+      name: 'Indicator information report.docx',
+      type: 'docx',
+      url: '/templates/Indicator information report.docx',
+    },
   },
   {
     id: 'tpl-4',
@@ -81,6 +85,6 @@ export const initialTemplates: ReportTemplate[] = [
     description: 'Complete list of all indicators in the system',
     group: 'Required reporting',
     dataSources: [{ dataSourceId: 'indicators-all', key: 'indicators' }],
-    templateFile: { name: 'Indicator list.docx', type: 'docx' },
+    templateFile: { name: 'Indicator list.docx', type: 'docx', url: '/templates/Indicator list.docx' },
   },
 ]
