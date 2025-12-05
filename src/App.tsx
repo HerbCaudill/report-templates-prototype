@@ -106,6 +106,9 @@ function App() {
     window.history.back()
   }
 
+  // Compute existing groups from templates
+  const existingGroups = [...new Set(templates.map(t => t.group).filter(Boolean))].sort()
+
   const handleGenerateReport = (options: {
     projectId?: string
     reportingPeriodId?: string
@@ -133,6 +136,7 @@ function App() {
         <EditTemplatePage
           template={editingTemplate}
           isNew={isNewTemplate}
+          existingGroups={existingGroups}
           onChange={handleTemplateChange}
           onCreate={handleCreateTemplate}
           onDelete={handleDeleteTemplate}

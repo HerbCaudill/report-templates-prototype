@@ -6,6 +6,7 @@ import { InfoTooltip } from './InfoTooltip'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
+  existingGroups: string[]
   isNew: boolean
   onChange: (template: ReportTemplate) => void
   onCreate: (template: ReportTemplate) => void
@@ -13,10 +14,19 @@ type EditTemplatePageProps = {
   onDone: () => void
 }
 
-export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete, onDone }: EditTemplatePageProps) {
+export function EditTemplatePage({
+  template,
+  existingGroups,
+  isNew,
+  onChange,
+  onCreate,
+  onDelete,
+  onDone,
+}: EditTemplatePageProps) {
   const [id] = useState(template?.id ?? `tpl-${Date.now()}`)
   const [name, setName] = useState(template?.name ?? '')
   const [description, setDescription] = useState(template?.description ?? '')
+  const [group, setGroup] = useState(template?.group ?? '')
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
@@ -25,6 +35,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
   const saveChanges = (updates: {
     name?: string
     description?: string
+    group?: string
     dataSources?: TemplateDataSource[]
     templateFile?: TemplateFile | null
   }) => {
@@ -34,6 +45,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
         id,
         name: updates.name ?? name,
         description: updates.description ?? description,
+        group: updates.group ?? group,
         dataSources: updates.dataSources ?? selectedDataSources,
         templateFile: updates.templateFile !== undefined ? updates.templateFile : templateFile,
       })
@@ -95,13 +107,49 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
     }
   }
 
+  const handleGroupChange = (newGroup: string) => {
+    setGroup(newGroup)
+    if (hasBeenCreated) {
+      saveChanges({ group: newGroup })
+    }
+  }
+
   const handleFileUpload = () => {
-    // Simulate file upload - auto-generate filename based on template name
-    const baseName = name.trim() || 'Template'
-    const fileName = `${baseName}.docx`
-    const newFile = { name: fileName, type: 'docx' as const }
+    // Simulate file upload - prompt for filename to simulate file picker
+    const fileName = prompt('Enter template filename (e.g., Quarterly Report.docx):')
+    if (!fileName) return
+
+    const extension = fileName.split('.').pop()?.toLowerCase()
+    if (extension !== 'docx' && extension !== 'xlsx' && extension !== 'pptx') {
+      alert('Please use .docx, .xlsx, or .pptx files')
+      return
+    }
+
+    const newFile = { name: fileName, type: extension as 'docx' | 'xlsx' | 'pptx' }
     setTemplateFile(newFile)
-    saveChanges({ templateFile: newFile })
+
+    // Derive template name from filename (remove extension)
+    const derivedName = fileName.replace(/\.(docx|xlsx|pptx)$/i, '')
+    if (!name.trim()) {
+      setName(derivedName)
+    }
+
+    // For new templates, create immediately when file is uploaded
+    if (isNew && !hasBeenCreated) {
+      const newName = name.trim() || derivedName
+      onCreate({
+        id,
+        name: newName,
+        description,
+        group,
+        dataSources: selectedDataSources,
+        templateFile: newFile,
+      })
+      setName(newName)
+      setHasBeenCreated(true)
+    } else {
+      saveChanges({ templateFile: newFile })
+    }
   }
 
   const getDataSourceLabel = (dataSourceId: string) => {
@@ -128,164 +176,201 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
     return true
   }
 
-  const isValid = name.trim() !== '' && selectedDataSources.length > 0 && templateFile !== null
-
   const handleDone = () => {
-    if (isNew && !hasBeenCreated && isValid) {
-      onCreate({
-        id,
-        name,
-        description,
-        dataSources: selectedDataSources,
-        templateFile,
-      })
-      setHasBeenCreated(true)
-    }
     onDone()
   }
 
   return (
     <div className="w-[550px]">
       <h2 className="mb-8 text-xl font-semibold text-gray-800">
-        {isNew ? 'New report template' : 'Edit report template'}
+        {isNew && !hasBeenCreated ? 'New report template' : 'Edit report template'}
       </h2>
 
-      <div className="mb-8">
-        <label htmlFor="template-name" className="mb-2 block text-sm font-semibold text-gray-700">
-          Name
-        </label>
-        <input
-          id="template-name"
-          type="text"
-          value={name}
-          onChange={e => handleNameChange(e.target.value)}
-          placeholder="Template name"
-          className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
-        />
-      </div>
-
-      <div className="mb-8">
-        <label htmlFor="template-description" className="mb-2 block text-sm font-semibold text-gray-700">
-          Description
-        </label>
-        <textarea
-          id="template-description"
-          value={description}
-          onChange={e => handleDescriptionChange(e.target.value)}
-          placeholder="Optional description for this template"
-          rows={5}
-          className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
-        />
-      </div>
-
-      <div className="mb-8">
-        <label className="mb-2 block text-sm font-semibold text-gray-700">Data sources</label>
-        {selectedDataSources.length > 0 && (
-          <table className="mb-3 w-full border-collapse text-[13px]">
-            <thead>
-              <tr>
-                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Type</th>
-                <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">
-                  <span className="flex items-center gap-1">
-                    Key
-                    <InfoTooltip text="This key must match the placeholder tags in your template file." />
-                  </span>
-                </th>
-                <th className="border-b border-gray-200 p-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedDataSources.map((ds, index) => (
-                <tr key={index}>
-                  <td className="border-b border-gray-200 p-2">{getDataSourceLabel(ds.dataSourceId)}</td>
-                  <td className="border-b border-gray-200 p-2">
-                    <input
-                      type="text"
-                      value={ds.key}
-                      onChange={e => handleKeyChange(index, e.target.value)}
-                      className="w-full rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
-                    />
-                  </td>
-                  <td className="border-b border-gray-200 p-2">
-                    <button
-                      type="button"
-                      className="border-none bg-transparent p-1 text-gray-400 hover:text-gray-600"
-                      onClick={() => handleRemoveDataSource(index)}
-                    >
-                      <TrashIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-
-        <div className="relative">
+      {!hasBeenCreated ? (
+        <div className="mb-8">
+          <label className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
+            Template file
+            <InfoTooltip text="Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports." />
+          </label>
           <button
             type="button"
-            className="flex w-full items-center justify-between rounded border border-gray-200 bg-white px-3 py-2 text-left text-sm text-gray-400"
-            onClick={() => setShowDataSourceDropdown(!showDataSourceDropdown)}
-          >
-            Add datasource...
-            <span className="text-[10px] text-gray-400">▼</span>
-          </button>
-          {showDataSourceDropdown && (
-            <div className="absolute left-0 right-0 top-full z-10 max-h-[300px] overflow-y-auto rounded border border-gray-200 bg-white shadow-lg">
-              {Object.entries(groupedDataSources).map(([category, sources]) => {
-                const availableSources = sources.filter(ds => canAddDataSource(ds))
-                if (availableSources.length === 0) return null
-                return (
-                  <div key={category} className="border-b border-gray-100 last:border-b-0">
-                    <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase text-gray-500">{category}</div>
-                    {availableSources.map(ds => (
-                      <button
-                        key={ds.id}
-                        type="button"
-                        className="block w-full bg-transparent px-5 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
-                        onClick={() => handleAddDataSource(ds)}
-                      >
-                        {ds.label}
-                      </button>
-                    ))}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="mb-8">
-        <label className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
-          Template
-          <InfoTooltip text="Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports." />
-        </label>
-        {templateFile ? (
-          <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
-            <WordIcon />
-            <span className="flex-1 text-sm text-gray-800">{templateFile.name}</span>
-            <button
-              type="button"
-              className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-              onClick={handleFileUpload}
-            >
-              Upload new...
-            </button>
-          </div>
-        ) : (
-          <button
-            type="button"
-            className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
             onClick={handleFileUpload}
           >
-            Upload new...
+            Upload template file...
           </button>
-        )}
-      </div>
+        </div>
+      ) : (
+        <>
+          <div className="mb-8">
+            <label htmlFor="template-name" className="mb-2 block text-sm font-semibold text-gray-700">
+              Name
+            </label>
+            <input
+              id="template-name"
+              type="text"
+              value={name}
+              onChange={e => handleNameChange(e.target.value)}
+              placeholder="Template name"
+              className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
+            />
+          </div>
 
-      <div className="mt-10 flex items-center">
-        {hasBeenCreated && (
+          <div className="mb-8">
+            <label htmlFor="template-description" className="mb-2 block text-sm font-semibold text-gray-700">
+              Description
+            </label>
+            <textarea
+              id="template-description"
+              value={description}
+              onChange={e => handleDescriptionChange(e.target.value)}
+              placeholder="Optional description for this template"
+              rows={5}
+              className="w-full rounded border border-gray-200 px-3 py-2 text-sm focus:border-black focus:outline-none"
+            />
+          </div>
+
+          <div className="mb-8">
+            <label htmlFor="template-group" className="mb-2 block text-sm font-semibold text-gray-700">
+              Group
+            </label>
+            <div className="flex gap-2">
+              <select
+                id="template-group"
+                value={existingGroups.includes(group) ? group : ''}
+                onChange={e => {
+                  if (e.target.value === '__new__') {
+                    const newGroup = prompt('Enter new group name:')
+                    if (newGroup?.trim()) {
+                      handleGroupChange(newGroup.trim())
+                    }
+                  } else {
+                    handleGroupChange(e.target.value)
+                  }
+                }}
+                className="flex-1 cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-[length:12px] bg-[right_12px_center] bg-no-repeat px-3 py-2 pr-8 text-sm focus:border-black focus:outline-none"
+              >
+                <option value="">No group</option>
+                {existingGroups.map(g => (
+                  <option key={g} value={g}>
+                    {g}
+                  </option>
+                ))}
+                <option value="__new__">+ Add new group...</option>
+              </select>
+              {group && !existingGroups.includes(group) && (
+                <span className="flex items-center rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
+                  {group}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <label className="mb-2 block text-sm font-semibold text-gray-700">Data sources</label>
+            {selectedDataSources.length === 0 && (
+              <p className="mb-3 text-sm text-amber-600">Add at least one data source to enable report generation.</p>
+            )}
+            {selectedDataSources.length > 0 && (
+              <table className="mb-3 w-full border-collapse text-[13px]">
+                <thead>
+                  <tr>
+                    <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Type</th>
+                    <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">
+                      <span className="flex items-center gap-1">
+                        Key
+                        <InfoTooltip text="This key must match the placeholder tags in your template file." />
+                      </span>
+                    </th>
+                    <th className="border-b border-gray-200 p-2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedDataSources.map((ds, index) => (
+                    <tr key={index}>
+                      <td className="border-b border-gray-200 p-2">{getDataSourceLabel(ds.dataSourceId)}</td>
+                      <td className="border-b border-gray-200 p-2">
+                        <input
+                          type="text"
+                          value={ds.key}
+                          onChange={e => handleKeyChange(index, e.target.value)}
+                          className="w-full rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
+                        />
+                      </td>
+                      <td className="border-b border-gray-200 p-2">
+                        <button
+                          type="button"
+                          className="border-none bg-transparent p-1 text-gray-400 hover:text-gray-600"
+                          onClick={() => handleRemoveDataSource(index)}
+                        >
+                          <TrashIcon />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+
+            <div className="relative">
+              <button
+                type="button"
+                className="flex w-full items-center justify-between rounded border border-gray-200 bg-white px-3 py-2 text-left text-sm text-gray-400"
+                onClick={() => setShowDataSourceDropdown(!showDataSourceDropdown)}
+              >
+                Add datasource...
+                <span className="text-[10px] text-gray-400">▼</span>
+              </button>
+              {showDataSourceDropdown && (
+                <div className="absolute left-0 right-0 top-full z-10 max-h-[300px] overflow-y-auto rounded border border-gray-200 bg-white shadow-lg">
+                  {Object.entries(groupedDataSources).map(([category, sources]) => {
+                    const availableSources = sources.filter(ds => canAddDataSource(ds))
+                    if (availableSources.length === 0) return null
+                    return (
+                      <div key={category} className="border-b border-gray-100 last:border-b-0">
+                        <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase text-gray-500">
+                          {category}
+                        </div>
+                        {availableSources.map(ds => (
+                          <button
+                            key={ds.id}
+                            type="button"
+                            className="block w-full bg-transparent px-5 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
+                            onClick={() => handleAddDataSource(ds)}
+                          >
+                            {ds.label}
+                          </button>
+                        ))}
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <label className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
+              Template file
+              <InfoTooltip text="Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports." />
+            </label>
+            <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
+              <WordIcon />
+              <span className="flex-1 text-sm text-gray-800">{templateFile?.name}</span>
+              <button
+                type="button"
+                className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+                onClick={handleFileUpload}
+              >
+                Replace...
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {hasBeenCreated && (
+        <div className="mt-10 flex items-center">
           <button
             type="button"
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
@@ -294,6 +379,7 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
                 id,
                 name,
                 description,
+                group,
                 dataSources: selectedDataSources,
                 templateFile,
               })
@@ -302,19 +388,16 @@ export function EditTemplatePage({ template, isNew, onChange, onCreate, onDelete
             <TrashIcon />
             Delete this report template
           </button>
-        )}
-        <button
-          type="button"
-          className={`ml-auto flex items-center gap-1.5 rounded-md px-4 py-2 text-sm ${
-            isValid ? 'bg-black text-white hover:bg-gray-800' : 'cursor-not-allowed bg-gray-200 text-gray-400'
-          }`}
-          onClick={handleDone}
-          disabled={!isValid}
-        >
-          <CheckIcon />
-          Done
-        </button>
-      </div>
+          <button
+            type="button"
+            className="ml-auto flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            onClick={handleDone}
+          >
+            <CheckIcon />
+            Done
+          </button>
+        </div>
+      )}
     </div>
   )
 }
