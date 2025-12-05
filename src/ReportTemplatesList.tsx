@@ -89,13 +89,9 @@ export function ReportTemplatesList({ templates, onEdit, onGenerate, onUploadNew
         ))}
       </div>
       <input ref={fileInputRef} type="file" accept=".docx,.xlsx,.pptx" onChange={handleFileChange} className="hidden" />
-      <button
-        type="button"
-        className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-        onClick={() => fileInputRef.current?.click()}
-      >
+      <Button variant="primary" onClick={() => fileInputRef.current?.click()}>
         Upload new template
-      </button>
+      </Button>
     </div>
   )
 }

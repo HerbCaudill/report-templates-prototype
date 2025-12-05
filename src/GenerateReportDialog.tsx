@@ -3,6 +3,7 @@ import type { OutputFormat, ReportTemplate } from './types'
 import { projects, reportingPeriods, indicators } from './mockData'
 import { SealIcon } from './icons'
 import { InfoTooltip } from './InfoTooltip'
+import { Button } from './components/Button'
 
 type GenerateReportDialogProps = {
   template: ReportTemplate
@@ -168,29 +169,18 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
                   <span>Certified</span>
                 </div>
               ) : (
-                <button
-                  type="button"
-                  className="mt-3 w-full rounded-md bg-black px-3 py-1.5 text-sm text-white hover:bg-gray-800"
-                  onClick={() => setIsCertified(true)}
-                >
+                <Button variant="primary" className="mt-3 w-full" onClick={() => setIsCertified(true)}>
                   Certify
-                </button>
+                </Button>
               )}
             </div>
           )}
         </div>
 
         <div className="mt-6 flex justify-end gap-2">
-          <button
-            type="button"
-            className={`rounded-md px-4 py-2 text-sm ${
-              !isValid ? 'cursor-not-allowed bg-gray-200 text-gray-400' : 'bg-black text-white hover:bg-gray-800'
-            }`}
-            onClick={handleGenerate}
-            disabled={!isValid}
-          >
+          <Button variant="primary" onClick={handleGenerate} disabled={!isValid}>
             Generate
-          </button>
+          </Button>
         </div>
       </div>
     </div>

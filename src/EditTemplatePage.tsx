@@ -179,13 +179,9 @@ export function EditTemplatePage({
 
       {!hasBeenCreated ? (
         <FormField label="Template file" tooltip={templateFileTooltip}>
-          <button
-            type="button"
-            className="rounded bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-            onClick={() => fileInputRef.current?.click()}
-          >
+          <Button variant="primary" onClick={() => fileInputRef.current?.click()}>
             Upload template file...
-          </button>
+          </Button>
         </FormField>
       ) : (
         <>
@@ -352,14 +348,10 @@ export function EditTemplatePage({
             <TrashIcon />
             Delete this report template
           </button>
-          <button
-            type="button"
-            className="ml-auto flex items-center gap-1.5 rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-            onClick={onDone}
-          >
+          <Button variant="primary" className="ml-auto flex items-center gap-1.5" onClick={onDone}>
             <CheckIcon />
             Done
-          </button>
+          </Button>
         </div>
       )}
     </div>
