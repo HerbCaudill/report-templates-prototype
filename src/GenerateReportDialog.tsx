@@ -4,6 +4,7 @@ import { projects, reportingPeriods, indicators } from './mockData'
 import { SealIcon } from './icons'
 import { InfoTooltip } from './InfoTooltip'
 import { Button } from './components/Button'
+import { Select } from './components/Select'
 
 type GenerateReportDialogProps = {
   template: ReportTemplate
@@ -50,9 +51,6 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
     })
   }
 
-  const selectClassName =
-    "w-full cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-size-[12px] bg-position-[right_12px_center] bg-no-repeat px-3 py-2.5 pr-8 text-sm focus:border-black focus:outline-none"
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <div className="w-[350px] max-w-[90vw] rounded-lg bg-white p-6 shadow-xl" onClick={e => e.stopPropagation()}>
@@ -60,44 +58,40 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
 
         {needsProject && (
           <div className="mb-5">
-            <select value={projectId} onChange={e => setProjectId(e.target.value)} className={selectClassName}>
+            <Select value={projectId} onChange={e => setProjectId(e.target.value)}>
               <option value="">Choose project...</option>
               {projects.map(project => (
                 <option key={project.id} value={project.id}>
                   {project.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 
         {needsReportingPeriod && (
           <div className="mb-5">
-            <select
-              value={reportingPeriodId}
-              onChange={e => setReportingPeriodId(e.target.value)}
-              className={selectClassName}
-            >
+            <Select value={reportingPeriodId} onChange={e => setReportingPeriodId(e.target.value)}>
               <option value="">Choose reporting period...</option>
               {reportingPeriods.map(period => (
                 <option key={period.id} value={period.id}>
                   {period.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 
         {needsIndicator && (
           <div className="mb-5">
-            <select value={indicatorId} onChange={e => setIndicatorId(e.target.value)} className={selectClassName}>
+            <Select value={indicatorId} onChange={e => setIndicatorId(e.target.value)}>
               <option value="">Choose indicator...</option>
               {indicators.map(indicator => (
                 <option key={indicator.id} value={indicator.id}>
                   {indicator.name}
                 </option>
               ))}
-            </select>
+            </Select>
           </div>
         )}
 

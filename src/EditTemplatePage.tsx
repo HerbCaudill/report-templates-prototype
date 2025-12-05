@@ -7,6 +7,7 @@ import { Input } from './components/Input'
 import { TextArea } from './components/TextArea'
 import { Button } from './components/Button'
 import { FormField } from './components/FormField'
+import { Select } from './components/Select'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
@@ -207,7 +208,7 @@ export function EditTemplatePage({
 
           <FormField label="Group" htmlFor="template-group">
             <div className="flex gap-2">
-              <select
+              <Select
                 id="template-group"
                 value={existingGroups.includes(group) ? group : ''}
                 onChange={e => {
@@ -220,7 +221,7 @@ export function EditTemplatePage({
                     handleFieldChange('group', e.target.value, setGroup)
                   }
                 }}
-                className="flex-1 cursor-pointer appearance-none rounded border border-gray-200 bg-white bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%23999%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-size-[12px] bg-position-[right_12px_center] bg-no-repeat px-3 py-2 pr-8 text-sm focus:border-black focus:outline-none"
+                className="flex-1"
               >
                 <option value="">No group</option>
                 {existingGroups.map(g => (
@@ -229,7 +230,7 @@ export function EditTemplatePage({
                   </option>
                 ))}
                 <option value="__new__">+ Add new group...</option>
-              </select>
+              </Select>
               {group && !existingGroups.includes(group) && (
                 <span className="flex items-center rounded border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">
                   {group}
@@ -290,7 +291,7 @@ export function EditTemplatePage({
                 onClick={() => setShowDataSourceDropdown(!showDataSourceDropdown)}
               >
                 Add datasource...
-                <span className="text-[10px] text-gray-400">▼</span>
+                <span className="text-base text-gray-400">▾</span>
               </button>
               {showDataSourceDropdown && (
                 <div className="absolute left-0 right-0 top-full z-10 max-h-[300px] overflow-y-auto rounded border border-gray-200 bg-white shadow-lg">
