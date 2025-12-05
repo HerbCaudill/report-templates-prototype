@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import type { ReportTemplate, TemplateFile } from './types'
 import { WordIcon } from './icons'
+import { Button } from './components/Button'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
@@ -21,26 +22,17 @@ function TemplateRow({
   const canGenerate = template.dataSources.length > 0
   return (
     <div className="flex items-center gap-3 py-2.5">
-      <button
-        type="button"
-        className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
-        onClick={() => onEdit(template)}
-      >
-        Edit
-      </button>
+      <Button onClick={() => onEdit(template)}>Edit</Button>
       <WordIcon />
       <span className="flex-1 text-sm text-gray-800">{template.name}</span>
-      <button
-        type="button"
-        className={`rounded-md border border-gray-200 px-3 py-1.5 text-sm ${
-          canGenerate ? 'bg-white text-gray-700 hover:bg-gray-50' : 'cursor-not-allowed bg-gray-100 text-gray-400'
-        }`}
+      <Button
+        className={canGenerate ? '' : 'cursor-not-allowed bg-gray-100 text-gray-400 hover:bg-gray-100'}
         onClick={() => canGenerate && onGenerate(template)}
         disabled={!canGenerate}
         title={canGenerate ? undefined : 'Add data sources to enable generation'}
       >
         Generate
-      </button>
+      </Button>
     </div>
   )
 }
