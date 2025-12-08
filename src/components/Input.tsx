@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react'
 
+/** Input component that wraps a standard HTML input element with additional styling. */
 export function Input(props: ComponentProps<'input'>) {
   return (
     <input
