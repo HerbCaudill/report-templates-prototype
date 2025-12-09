@@ -1,28 +1,16 @@
-# Report templates feature specification
-
-This document describes the Report Templates feature, which allows users to create, manage, and generate reports from customizable templates.
-
-## Overview
+## Report templates
 
 Report Templates enable users to define reusable document templates that combine static content with dynamic data from various sources. When generating a report, the system merges selected data with the template to produce a final document.
 
-## Core concepts
+A **report template** consists of:
 
-### Report template
+- **Name**: Display name for the template
+- **Description**: Detailed description explaining the template's purpose and usage
+- **Group**: Optional grouping for organizing templates in the list view
+- **Data sources**: Zero or more data sources to be merged into the template
+- **Template file**: The uploaded document template (Word, Excel, or PowerPoint)
 
-A report template consists of:
-
-- **Name** - Display name for the template
-- **Description** - Detailed description explaining the template's purpose and usage
-- **Group** - Optional grouping for organizing templates in the list view
-- **Data sources** - Zero or more data sources to be merged into the template
-- **Template file** - The uploaded document template (Word, Excel, or PowerPoint)
-
-### Data sources
-
-Data sources define what data will be available when generating a report. Each data source is categorized and may require user selection at generation time.
-
-#### Categories
+**Data sources** define what data will be available when generating a report. Each data source is categorized and may require user selection at generation time.
 
 | Category          | Description                  | Selection Behavior                                        |
 | ----------------- | ---------------------------- | --------------------------------------------------------- |
@@ -31,16 +19,16 @@ Data sources define what data will be available when generating a report. Each d
 | **Data tables**   | Custom data tables           | Multiple allowed                                          |
 | **Saved reports** | Previously saved report data | Multiple allowed                                          |
 
-#### Project data sources
+### Project data sources
 
-- **All projects** - Includes data for all projects; no user selection required
-- **Single project** - User selects one project when generating
-- **Single project, single reporting period** - User selects both a project and a reporting period when generating
+- **All projects**: Includes metadata for all projects.
+- **Single project**: User selects one project when generating. Includes project metadata, associated data (budget/finance, geography, checklists) and all performance data (data tables, indicator results, targets, and comments).
+- **Single project, single reporting period**: User selects both a project and a reporting period when generating. Includes project metadata, reporting period metadata, and all performance data (indicator results, targets, and comments).
 
-#### Indicator data sources
+### Indicator data sources
 
-- **All indicators** - Includes data for all indicators; no user selection required
-- **Single indicator** - User selects one indicator when generating
+- **All indicators**: Includes metadata for all indicators (definitions, disaggregations).
+- **Single indicator**: User selects one indicator when generating. Includes indicator metadata and all performance data (indicator results, targets, and comments).
 
 ### Template data source keys
 
@@ -50,11 +38,11 @@ For example, if a project data source has the key `project`, the template file w
 
 ### Template file
 
-Template files are Word (.docx), Excel (.xlsx), or PowerPoint (.pptx) documents containing placeholder tags (e.g., `{{project.name}}`) that are replaced with actual data when generating reports.
+Template files are Word (docx), Excel (xlsx), or PowerPoint (pptx) documents containing placeholder tags (e.g., `{{project.name}}`) that are replaced with actual data when generating reports.
 
 ## User interface
 
-### 1. Report templates list
+### Report templates list
 
 The main view displays all available templates, organized by group.
 
@@ -64,39 +52,39 @@ The main view displays all available templates, organized by group.
 - Groups are displayed in alphabetical order, with ungrouped templates shown first (without a heading)
 - Each group shows a heading followed by a list of template rows
 
-#### For each template row
+For each template row:
 
-- **Edit button** - Opens the edit page for the template
-- **Document icon** - Visual indicator of document type (Word/Excel/Powerpoint)
-- **Template name** - Display name
-- **Generate button** - Opens the generate dialog (disabled if no data sources configured)
+- **Edit button**: Opens the edit page for the template
+- **Document icon**: Visual indicator of document type (Word/Excel/Powerpoint)
+- **Template name**: Display name
+- **Generate button**: Opens the generate dialog (disabled if no data sources configured)
 
 #### Actions
 
-- **Upload new template** button - Opens file picker to upload a template file, which creates a new template
+- **Upload new template** button: Opens file picker to upload a template file, which creates a new template
 
-### 2. Edit template page
+### Edit template page
 
 A full-page form for creating or editing templates.
 
 #### Fields
 
-- **Name** (required) - Text input for the template name (auto-derived from filename for new templates)
-- **Description** - Multi-line text area for detailed description
-- **Group** - Dropdown to select existing group or create a new one
+- **Name** (required): Text input for the template name (auto-derived from filename for new templates)
+- **Description**: Multi-line text area for detailed description
+- **Group**: Dropdown to select existing group or create a new one
   - Options: "No group", existing groups, "+ Add new group..."
   - When creating a new group, a prompt dialog appears
   - Newly created groups display as a tag next to the dropdown
-- **Data sources** - Table of selected data sources with:
-  - Type column - The data source label
-  - Key column - Editable text input for the placeholder key
-  - Delete button - Removes the data source
-  - "Add datasource..." dropdown - Grouped by category
+- **Data sources**: Table of selected data sources with:
+  - Type column: The data source label
+  - Key column: Editable text input for the placeholder key
+  - Delete button: Removes the data source
+  - "Add datasource..." dropdown: Grouped by category
   - Warning message shown when no data sources are configured
-- **Template file** (required) - Displays the uploaded template with:
+- **Template file** (required): Displays the uploaded template with:
   - Word icon and filename
-  - **Download** button - Downloads the template file
-  - **Replace...** button - Opens file picker to replace the template
+  - **Download** button: Downloads the template file
+  - **Replace...** button: Opens file picker to replace the template
 
 #### New template flow
 
@@ -118,14 +106,14 @@ A full-page form for creating or editing templates.
 
 #### Actions
 
-- **Done** button (with checkmark icon) - Returns to list
-- **Delete this report template** link - Only shown for existing templates; deletes and returns to list
+- **Done** button (with checkmark icon): Returns to list
+- **Delete this report template** link: Only shown for existing templates; deletes and returns to list
 
 #### Browser navigation
 
 Back button returns to list
 
-### 3. Generate report dialog
+### Generate report dialog
 
 A modal dialog for generating a report from a template.
 
@@ -133,23 +121,24 @@ A modal dialog for generating a report from a template.
 
 Shown based on template data sources:
 
-- **Project dropdown** - Shown if template uses a single project data source
-- **Reporting period dropdown** - Shown if template requires a reporting period
-- **Indicator dropdown** - Shown if template uses a single indicator data source
+- **Project dropdown**: Shown if template uses a single project data source
+- **Reporting period dropdown**: Shown if template requires a reporting period
+- **Indicator dropdown**: Shown if template uses a single indicator data source
 
 #### Static fields
 
-- **Output format toggle** - PDF or Word (default: PDF)
-- **Save to documents checkbox** - Option to save to system document library
-- **Certify checkbox** - Option to digitally certify the report
+- **Output format toggle**: PDF or Word (default: PDF)
+- **Save to documents checkbox**: Option to save to system document library
+- **Certify checkbox**: Option to digitally certify the report
 
 #### Certification flow
 
 1. User checks "Certify" checkbox (disabled until required fields are filled)
 2. Certification panel appears with statement: "I, [User Name], certify this report."
-3. User clicks "Certify" button
-4. Seal icon with "Certified" text replaces the button
-5. Generate button becomes enabled
+3. Generate button is temporarily disabled
+4. User clicks "Certify" button
+5. Seal icon with "Certified" text replaces the button
+6. Generate button is re-enabled
 
 #### Validation
 
@@ -159,10 +148,10 @@ Shown based on template data sources:
 
 #### Actions
 
-- **Generate** button - Generates the report and closes dialog
-- Click outside dialog - Closes without generating
+- **Generate** button: Generates the report and closes dialog
+- Click outside dialog: Closes without generating
 
-## Information tooltips
+### Information tooltips
 
 Contextual help is provided via info icons (ⓘ) that show tooltips on hover:
 
