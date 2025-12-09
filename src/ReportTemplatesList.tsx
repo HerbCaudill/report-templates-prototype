@@ -26,9 +26,9 @@ function TemplateCard({
   const thumbnailUrl = `/templates/thumbnails/${template.name}.png`
 
   return (
-    <div className="group relative flex w-48 flex-col overflow-hidden rounded border border-gray-200 bg-white hover:shadow-md">
+    <div className="group relative flex w-48 flex-col overflow-hidden rounded border border-gray-200 bg-white p-3 hover:shadow-md">
       {/* Menu button - positioned absolutely in upper right */}
-      <div className="absolute right-2 top-2 z-10">
+      <div className="absolute right-5 top-5 z-10">
         <div className="relative">
           <button
             type="button"
@@ -106,7 +106,7 @@ function TemplateCard({
       </button>
 
       {/* Title */}
-      <div className="flex-1 p-3">
+      <div className="flex-1 pt-3">
         <h4 className="text-sm font-medium text-gray-800 line-clamp-2">{template.name}</h4>
       </div>
     </div>
