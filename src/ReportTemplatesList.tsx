@@ -1,43 +1,125 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { ReportTemplate, TemplateFile } from './types'
-import { WordIcon } from './icons'
 import { Button } from './components/Button'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
   onEdit: (template: ReportTemplate) => void
   onGenerate: (template: ReportTemplate) => void
+  onDelete: (template: ReportTemplate) => void
   onUploadNewTemplate: (file: TemplateFile) => void
 }
 
-function TemplateRow({
+function TemplateCard({
   template,
   onEdit,
   onGenerate,
+  onDelete,
 }: {
   template: ReportTemplate
   onEdit: (template: ReportTemplate) => void
   onGenerate: (template: ReportTemplate) => void
+  onDelete: (template: ReportTemplate) => void
 }) {
+  const [menuOpen, setMenuOpen] = useState(false)
   const canGenerate = template.dataSources.length > 0
+  const thumbnailUrl = `/templates/thumbnails/${template.name}.png`
+
   return (
-    <div className="flex items-center gap-3 py-2.5">
-      <Button onClick={() => onEdit(template)}>Edit</Button>
-      <WordIcon />
-      <span className="flex-1 text-sm text-gray-800">{template.name}</span>
-      <Button
-        className={canGenerate ? '' : 'cursor-not-allowed bg-gray-100 text-gray-400 hover:bg-gray-100'}
+    <div className="group relative flex w-48 flex-col overflow-hidden rounded border border-gray-200 bg-white hover:shadow-md">
+      {/* Menu button - positioned absolutely in upper right */}
+      <div className="absolute right-2 top-2 z-10">
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex h-6 w-6 items-center justify-center rounded hover:bg-white/80"
+            aria-label="More options"
+          >
+            <svg className="h-4 w-4 text-gray-600" fill="currentColor" viewBox="0 0 16 16">
+              <circle cx="8" cy="3" r="1.5" />
+              <circle cx="8" cy="8" r="1.5" />
+              <circle cx="8" cy="13" r="1.5" />
+            </svg>
+          </button>
+
+          {/* Dropdown menu */}
+          {menuOpen && (
+            <>
+              {/* Backdrop to close menu */}
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
+
+              {/* Menu */}
+              <div className="absolute right-0 top-7 z-20 w-36 rounded border border-gray-200 bg-white py-1 shadow-lg">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    canGenerate && onGenerate(template)
+                  }}
+                  disabled={!canGenerate}
+                  className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 ${
+                    !canGenerate ? 'cursor-not-allowed text-gray-400' : 'text-gray-700'
+                  }`}
+                >
+                  Generate
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    onEdit(template)
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMenuOpen(false)
+                    if (confirm(`Delete "${template.name}"?`)) {
+                      onDelete(template)
+                    }
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
+                >
+                  Delete
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Thumbnail - clickable to generate */}
+      <button
+        type="button"
         onClick={() => canGenerate && onGenerate(template)}
         disabled={!canGenerate}
-        title={canGenerate ? undefined : 'Add data sources to enable generation'}
+        className={`flex aspect-3/4 items-center justify-center overflow-hidden border border-gray-200 bg-gray-50 ${
+          canGenerate ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+        }`}
+        title={canGenerate ? 'Click to generate report' : 'Add data sources to enable generation'}
       >
-        Generate
-      </Button>
+        <img src={thumbnailUrl} alt={template.name} className="h-full w-full object-cover" />
+      </button>
+
+      {/* Title */}
+      <div className="flex-1 p-3">
+        <h4 className="text-sm font-medium text-gray-800 line-clamp-2">{template.name}</h4>
+      </div>
     </div>
   )
 }
 
-export function ReportTemplatesList({ templates, onEdit, onGenerate, onUploadNewTemplate }: ReportTemplatesListProps) {
+export function ReportTemplatesList({
+  templates,
+  onEdit,
+  onGenerate,
+  onDelete,
+  onUploadNewTemplate,
+}: ReportTemplatesListProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,15 +156,21 @@ export function ReportTemplatesList({ templates, onEdit, onGenerate, onUploadNew
   })
 
   return (
-    <div className="w-lg">
-      <h2 className="mb-4 text-3xl font-semibold text-gray-800">Report templates</h2>
-      <div className="mb-4">
+    <div className="max-w-6xl">
+      <h2 className="mb-6 text-3xl font-semibold text-gray-800">Report templates</h2>
+      <div className="mb-6">
         {sortedGroups.map(groupName => (
-          <div key={groupName} className="mb-6 last:mb-0">
-            {groupName !== 'Ungrouped' && <h3 className="mb-2 text-sm font-semibold text-gray-600">{groupName}</h3>}
-            <div className="flex flex-col divide-y divide-gray-200 border-y border-gray-200">
+          <div key={groupName} className="mb-8 last:mb-0">
+            {groupName !== 'Ungrouped' && <h3 className="mb-3 text-sm font-semibold text-gray-600">{groupName}</h3>}
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4">
               {groupedTemplates[groupName].map(template => (
-                <TemplateRow key={template.id} template={template} onEdit={onEdit} onGenerate={onGenerate} />
+                <TemplateCard
+                  key={template.id}
+                  template={template}
+                  onEdit={onEdit}
+                  onGenerate={onGenerate}
+                  onDelete={onDelete}
+                />
               ))}
             </div>
           </div>

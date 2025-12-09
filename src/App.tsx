@@ -139,6 +139,7 @@ function App() {
           templates={templates}
           onEdit={handleEdit}
           onGenerate={handleGenerate}
+          onDelete={handleDeleteTemplate}
           onUploadNewTemplate={handleUploadNewTemplate}
         />
       )}
