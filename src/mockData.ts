@@ -83,7 +83,7 @@ export const initialTemplates: ReportTemplate[] = [
     id: 'tpl-4',
     name: 'Indicator list',
     description: 'Complete list of all indicators in the system',
-    group: 'Required reporting',
+    group: 'Reference information',
     dataSources: [{ dataSourceId: 'indicators-all', key: 'indicators' }],
     templateFile: { name: 'Indicator list.docx', type: 'docx', url: '/templates/Indicator list.docx' },
   },
