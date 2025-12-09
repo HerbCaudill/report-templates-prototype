@@ -1,7 +1,15 @@
 import { useState } from 'react'
 import { InfoIcon } from './icons'
 
-export function InfoTooltip({ text, position = 'center' }: { text: string; position?: 'center' | 'left' }) {
+export function InfoTooltip({
+  text,
+  position = 'center',
+  className = '',
+}: {
+  text: string
+  position?: 'center' | 'left'
+  className?: string
+}) {
   const [isVisible, setIsVisible] = useState(false)
 
   const tooltipClasses =
@@ -15,7 +23,7 @@ export function InfoTooltip({ text, position = 'center' }: { text: string; posit
       : 'absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-800'
 
   return (
-    <span className="relative inline-flex items-center">
+    <span className={`relative inline-flex items-center ${className}`}>
       <button
         type="button"
         className="text-gray-400 hover:text-gray-600"
