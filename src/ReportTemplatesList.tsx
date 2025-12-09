@@ -27,9 +27,17 @@ function TemplateCard({
   const thumbnailUrl = `/templates/thumbnails/${template.name}.png`
 
   return (
-    <div className="group relative flex w-48 flex-col rounded border border-gray-200 bg-white p-3 hover:shadow-md">
+    <button
+      type="button"
+      onClick={() => canGenerate && onGenerate(template)}
+      disabled={!canGenerate}
+      title={canGenerate ? 'Click to generate report' : 'Add data sources to enable generation'}
+      className={`group relative flex w-48 flex-col rounded border border-gray-200 bg-white p-3 hover:shadow-md ${
+        canGenerate ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
+      }`}
+    >
       {/* Menu button - positioned absolutely in upper right */}
-      <div className="absolute right-5 top-5 z-10">
+      <div className="absolute right-5 top-5 z-10" onClick={e => e.stopPropagation()}>
         <div className="relative">
           <button
             type="button"
@@ -54,7 +62,8 @@ function TemplateCard({
               <div className="absolute right-0 top-7 z-20 w-36 rounded border border-gray-200 bg-white py-1 shadow-lg">
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation()
                     setMenuOpen(false)
                     canGenerate && onGenerate(template)
                   }}
@@ -67,7 +76,8 @@ function TemplateCard({
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation()
                     setMenuOpen(false)
                     onEdit(template)
                   }}
@@ -77,7 +87,8 @@ function TemplateCard({
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation()
                     setMenuOpen(false)
                     if (confirm(`Delete "${template.name}"?`)) {
                       onDelete(template)
@@ -93,27 +104,19 @@ function TemplateCard({
         </div>
       </div>
 
-      {/* Thumbnail - clickable to generate */}
-      <button
-        type="button"
-        onClick={() => canGenerate && onGenerate(template)}
-        disabled={!canGenerate}
-        className={`flex aspect-3/4 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50 ${
-          canGenerate ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
-        }`}
-        title={canGenerate ? 'Click to generate report' : 'Add data sources to enable generation'}
-      >
+      {/* Thumbnail */}
+      <div className="flex aspect-3/4 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50">
         <img src={thumbnailUrl} alt={template.name} className="h-full w-full object-cover" />
-      </button>
+      </div>
 
       {/* Title */}
       <div className="flex-1 pt-3">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" onClick={e => e.stopPropagation()}>
           <h4 className="text-sm font-medium text-gray-800 line-clamp-2">{template.name}</h4>
           {template.description && <InfoTooltip text={template.description} position="left" />}
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
