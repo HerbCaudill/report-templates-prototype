@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import type { ReportTemplate, TemplateFile } from './types'
 import { Button } from './components/Button'
 import { InfoTooltip } from './InfoTooltip'
+import { TrashIcon } from './icons'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
@@ -59,7 +60,7 @@ function TemplateCard({
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
 
               {/* Menu */}
-              <div className="absolute right-0 top-7 z-20 w-36 rounded border border-gray-200 bg-white py-1 shadow-lg">
+              <div className="absolute left-0 top-7 z-20 w-40 rounded border border-gray-200 bg-white py-1 shadow-lg">
                 <button
                   type="button"
                   onClick={e => {
@@ -68,10 +69,13 @@ function TemplateCard({
                     canGenerate && onGenerate(template)
                   }}
                   disabled={!canGenerate}
-                  className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-50 ${
+                  className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm hover:bg-gray-50 ${
                     !canGenerate ? 'cursor-not-allowed text-gray-400' : 'text-gray-700'
                   }`}
                 >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                   Generate
                 </button>
                 <button
@@ -81,8 +85,16 @@ function TemplateCard({
                     setMenuOpen(false)
                     onEdit(template)
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
+                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
                 >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
                   Edit
                 </button>
                 <button
@@ -94,8 +106,9 @@ function TemplateCard({
                       onDelete(template)
                     }
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
+                  className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
                 >
+                  <TrashIcon />
                   Delete
                 </button>
               </div>
