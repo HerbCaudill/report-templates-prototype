@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import type { ReportTemplate, TemplateFile } from './types'
 import { Button } from './components/Button'
+import { InfoTooltip } from './InfoTooltip'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
@@ -26,7 +27,7 @@ function TemplateCard({
   const thumbnailUrl = `/templates/thumbnails/${template.name}.png`
 
   return (
-    <div className="group relative flex w-48 flex-col overflow-hidden rounded border border-gray-200 bg-white p-3 hover:shadow-md">
+    <div className="group relative flex w-48 flex-col rounded border border-gray-200 bg-white p-3 hover:shadow-md">
       {/* Menu button - positioned absolutely in upper right */}
       <div className="absolute right-5 top-5 z-10">
         <div className="relative">
@@ -97,7 +98,7 @@ function TemplateCard({
         type="button"
         onClick={() => canGenerate && onGenerate(template)}
         disabled={!canGenerate}
-        className={`flex aspect-3/4 items-center justify-center overflow-hidden border border-gray-200 bg-gray-50 ${
+        className={`flex aspect-3/4 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50 ${
           canGenerate ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
         }`}
         title={canGenerate ? 'Click to generate report' : 'Add data sources to enable generation'}
@@ -107,7 +108,10 @@ function TemplateCard({
 
       {/* Title */}
       <div className="flex-1 pt-3">
-        <h4 className="text-sm font-medium text-gray-800 line-clamp-2">{template.name}</h4>
+        <div className="flex items-center gap-1">
+          <h4 className="text-sm font-medium text-gray-800 line-clamp-2">{template.name}</h4>
+          {template.description && <InfoTooltip text={template.description} position="left" />}
+        </div>
       </div>
     </div>
   )

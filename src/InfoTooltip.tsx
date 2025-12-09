@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import { InfoIcon } from './icons'
 
-export function InfoTooltip({ text }: { text: string }) {
+export function InfoTooltip({ text, position = 'center' }: { text: string; position?: 'center' | 'left' }) {
   const [isVisible, setIsVisible] = useState(false)
+
+  const tooltipClasses =
+    position === 'left'
+      ? 'absolute bottom-full left-0 z-20 mb-2 w-48 rounded bg-gray-800 px-2 py-1.5 text-xs font-normal text-white shadow-lg'
+      : 'absolute bottom-full left-1/2 z-20 mb-2 w-48 -translate-x-1/2 rounded bg-gray-800 px-2 py-1.5 text-xs font-normal text-white shadow-lg'
+
+  const arrowClasses =
+    position === 'left'
+      ? 'absolute left-3 top-full border-4 border-transparent border-t-gray-800'
+      : 'absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-800'
 
   return (
     <span className="relative inline-flex items-center">
@@ -17,9 +27,9 @@ export function InfoTooltip({ text }: { text: string }) {
         <InfoIcon className="size-3.5" />
       </button>
       {isVisible && (
-        <div className="absolute bottom-full left-1/2 z-20 mb-2 w-48 -translate-x-1/2 rounded bg-gray-800 px-2 py-1.5 text-xs font-normal text-white shadow-lg">
+        <div className={tooltipClasses}>
           {text}
-          <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-800" />
+          <div className={arrowClasses} />
         </div>
       )}
     </span>
