@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconMedal } from '@tabler/icons-react'
+import { IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
 import type { OutputFormat, ReportTemplate } from './types'
 import { projects, reportingPeriods, indicators } from './mockData'
 import { InfoTooltip } from './InfoTooltip'
@@ -159,7 +159,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
               <p className="text-sm text-gray-500">I, Herb Caudill, certify this report.</p>
               {isCertified ? (
                 <div className="mt-3 flex items-center gap-2 text-sm text-green-700">
-                  <IconMedal className="size-4" />
+                  <IconRosetteDiscountCheckFilled className="size-6" />
                   <span>Certified</span>
                 </div>
               ) : (
