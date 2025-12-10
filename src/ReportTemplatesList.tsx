@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
+import { IconTrash, IconDots, IconBolt, IconPencil } from '@tabler/icons-react'
 import type { ReportTemplate, TemplateFile } from './types'
 import { Button } from './components/Button'
 import { InfoTooltip } from './InfoTooltip'
-import { TrashIcon, MenuDotsIcon, LightningIcon, PencilIcon } from './icons'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
@@ -46,7 +46,7 @@ function TemplateCard({
             className="flex h-6 w-6 items-center justify-center rounded hover:bg-white/80"
             aria-label="More options"
           >
-            <MenuDotsIcon />
+            <IconDots className="size-4" />
           </button>
 
           {/* Dropdown menu */}
@@ -69,7 +69,7 @@ function TemplateCard({
                     !canGenerate ? 'cursor-not-allowed text-gray-400' : 'text-gray-700'
                   }`}
                 >
-                  <LightningIcon />
+                  <IconBolt className="size-4" />
                   Generate
                 </button>
                 <button
@@ -81,7 +81,7 @@ function TemplateCard({
                   }}
                   className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
                 >
-                  <PencilIcon />
+                  <IconPencil className="size-4" />
                   Edit
                 </button>
                 <button
@@ -95,7 +95,7 @@ function TemplateCard({
                   }}
                   className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-red-600 hover:bg-gray-50"
                 >
-                  <TrashIcon />
+                  <IconTrash className="size-4" />
                   Delete
                 </button>
               </div>

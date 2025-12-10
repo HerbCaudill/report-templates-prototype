@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { InfoIcon } from './icons'
+import { IconInfoCircle } from '@tabler/icons-react'
 import { cx } from './lib/cx'
 
 export function InfoTooltip({
@@ -33,7 +33,7 @@ export function InfoTooltip({
         onFocus={() => setIsVisible(true)}
         onBlur={() => setIsVisible(false)}
       >
-        <InfoIcon className="size-3.5" />
+        <IconInfoCircle className="size-3.5" />
       </button>
       {isVisible && (
         <div className={tooltipClasses}>

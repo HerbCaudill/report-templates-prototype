@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
+import { IconFileUpload, IconTrash, IconCheck, IconDownload } from '@tabler/icons-react'
 import type { DataSource, ReportTemplate, TemplateDataSource, TemplateFile } from './types'
 import { dataSources } from './mockData'
-import { WordIcon, TrashIcon, CheckIcon, DownloadIcon } from './icons'
 import { InfoTooltip } from './InfoTooltip'
 import { Input } from './components/Input'
 import { TextArea } from './components/TextArea'
@@ -277,7 +277,7 @@ export function EditTemplatePage({
                           className="border-none bg-transparent p-1 text-gray-400 hover:text-gray-600"
                           onClick={() => handleRemoveDataSource(index)}
                         >
-                          <TrashIcon />
+                          <IconTrash className="size-4" />
                         </button>
                       </td>
                     </tr>
@@ -325,14 +325,14 @@ export function EditTemplatePage({
 
           <FormField label="Template file" tooltip={templateFileTooltip}>
             <div className="flex items-center gap-2 rounded border border-gray-200 bg-gray-50 px-3 py-2">
-              <WordIcon />
+              <IconFileUpload className="size-4" />
               <span className="flex-1 text-sm text-gray-800">{templateFile?.name}</span>
               <a
                 href={templateFile?.url}
                 download={templateFile?.name}
                 className="flex items-center gap-1 rounded border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
               >
-                <DownloadIcon />
+                <IconDownload className="size-4" />
                 Download
               </a>
               <Button onClick={() => fileInputRef.current?.click()}>Replace...</Button>
@@ -348,11 +348,11 @@ export function EditTemplatePage({
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600"
             onClick={() => onDelete(getCurrentTemplate())}
           >
-            <TrashIcon />
+            <IconTrash className="size-4" />
             Delete this report template
           </button>
           <Button variant="primary" className="ml-auto flex items-center gap-1.5" onClick={onDone}>
-            <CheckIcon />
+            <IconCheck className="size-4" strokeWidth={3} />
             Done
           </Button>
         </div>
