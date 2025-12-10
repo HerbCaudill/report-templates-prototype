@@ -123,11 +123,13 @@ function TemplateCard({
       </div>
 
       {/* Title */}
-      <div className="flex-1 pt-3 text-left" onClick={e => e.stopPropagation()}>
+      <div className="flex-1 pt-3 text-left">
         <h4 className="text-sm font-medium text-gray-800">
           {template.name}
           {template.description && (
-            <InfoTooltip text={template.description} position="left" className="inline ml-1 align-text-bottom" />
+            <span onClick={e => e.stopPropagation()}>
+              <InfoTooltip text={template.description} position="left" className="inline ml-1 align-text-bottom" />
+            </span>
           )}
         </h4>
       </div>
