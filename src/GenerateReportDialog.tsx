@@ -5,9 +5,11 @@ import { projects, reportingPeriods, indicators } from './mockData'
 import { InfoTooltip } from './InfoTooltip'
 import { Button } from './components/Button'
 import { Select } from './components/Select'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type GenerateReportDialogProps = {
   template: ReportTemplate
+  isOpen: boolean
   onGenerate: (options: {
     projectId?: string
     reportingPeriodId?: string
@@ -19,7 +21,7 @@ type GenerateReportDialogProps = {
   onClose: () => void
 }
 
-export function GenerateReportDialog({ template, onGenerate, onClose }: GenerateReportDialogProps) {
+export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: GenerateReportDialogProps) {
   const [projectId, setProjectId] = useState('')
   const [reportingPeriodId, setReportingPeriodId] = useState('')
   const [indicatorId, setIndicatorId] = useState('')
@@ -52,9 +54,11 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
-      <div className="w-[350px] max-w-[90vw] rounded-lg bg-white p-6 shadow-xl" onClick={e => e.stopPropagation()}>
-        <h2 className="mb-5 text-base font-semibold text-gray-800">{template.name}</h2>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="w-[350px] max-w-[90vw]">
+        <DialogHeader>
+          <DialogTitle>{template.name}</DialogTitle>
+        </DialogHeader>
 
         {needsProject && (
           <div className="mb-5">
@@ -177,7 +181,7 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
             Generate
           </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   )
 }

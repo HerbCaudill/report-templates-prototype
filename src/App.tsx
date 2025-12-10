@@ -159,6 +159,7 @@ function App() {
       {generatingTemplate && (
         <GenerateReportDialog
           template={generatingTemplate}
+          isOpen={!!generatingTemplate}
           onGenerate={handleGenerateReport}
           onClose={() => setGeneratingTemplate(null)}
         />
