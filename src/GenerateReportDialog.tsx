@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { IconRosetteDiscountCheckFilled } from '@tabler/icons-react'
+import { IconRosetteDiscountCheckFilled, IconBolt } from '@tabler/icons-react'
 import type { OutputFormat, ReportTemplate } from './types'
 import { projects, reportingPeriods, indicators } from './mockData'
 import { InfoTooltip } from './InfoTooltip'
@@ -172,7 +172,8 @@ export function GenerateReportDialog({ template, onGenerate, onClose }: Generate
         </div>
 
         <div className="mt-6 flex justify-end gap-2">
-          <Button variant="primary" onClick={handleGenerate} disabled={!isValid}>
+          <Button variant="primary" onClick={handleGenerate} disabled={!isValid} className="flex items-center gap-1.5">
+            <IconBolt className="size-4" />
             Generate
           </Button>
         </div>
