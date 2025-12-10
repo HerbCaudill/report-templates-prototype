@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { InfoIcon } from './icons'
+import { cx } from './lib/cx'
 
 export function InfoTooltip({
   text,
@@ -23,7 +24,7 @@ export function InfoTooltip({
       : 'absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-gray-800'
 
   return (
-    <span className={`relative inline-flex items-center ${className}`}>
+    <span className={cx('relative inline-flex items-center', className)}>
       <button
         type="button"
         className="text-gray-400 hover:text-gray-600"

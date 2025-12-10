@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(superpowers:brainstorming)",
+      "Bash(pnpm install:*)",
+      "Bash(npx tailwindcss:*)",
+      "Bash(pnpm exec tailwindcss:*)",
+      "Bash(pnpm dlx:*)"
+    ]
+  }
+}
