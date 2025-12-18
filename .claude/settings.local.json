@@ -9,5 +9,9 @@
       "Bash(pnpm tsc:*)",
       "Bash(pnpm build:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "shadcn"
+  ],
+  "enableAllProjectMcpServers": true
 }
