@@ -2,7 +2,7 @@ export type DataSource = {
   id: string
   label: string
   defaultKey?: string
-  category: 'Projects' | 'Indicators' | 'Data tables' | 'Saved reports'
+  category: 'Projects' | 'Indicators' | 'Data tables' | 'Saved reports' | 'User input'
 }
 
 export type TemplateDataSource = {

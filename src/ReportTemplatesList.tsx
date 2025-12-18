@@ -172,7 +172,7 @@ export function ReportTemplatesList({
       <div className="mb-6">
         {sortedGroups.map(groupName => (
           <div key={groupName} className="mb-8 last:mb-0">
-            {groupName !== 'Ungrouped' && <h3 className="mb-3 text-sm font-semibold text-gray-600">{groupName}</h3>}
+            {groupName !== 'Ungrouped' && <h3 className="mb-3 border-b border-gray-400 pb-2 text-lg font-semibold text-gray-600">{groupName}</h3>}
             <div className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4">
               {groupedTemplates[groupName].map(template => (
                 <TemplateCard

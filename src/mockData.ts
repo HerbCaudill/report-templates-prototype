@@ -18,6 +18,9 @@ export const dataSources: DataSource[] = [
   { id: 'dt-2', label: 'Vaccinations', category: 'Data tables' },
   // Saved reports
   { id: 'sr-1', label: 'Trainings by quarter', category: 'Saved reports' },
+  // User input
+  { id: 'user-input-program-manager', label: 'Name of program manager', category: 'User input' },
+  { id: 'user-input-partner-contact', label: 'Name of partner contact', category: 'User input' },
 ]
 
 export const projects: Project[] = [
@@ -56,6 +59,8 @@ export const initialTemplates: ReportTemplate[] = [
     dataSources: [
       { dataSourceId: 'projects-single-reporting-period', key: 'project' },
       { dataSourceId: 'dt-1', key: 'trainings' },
+      { dataSourceId: 'user-input-program-manager', key: 'programManager' },
+      { dataSourceId: 'user-input-partner-contact', key: 'partnerContact' },
     ],
     templateFile: { name: 'XYZ template.docx', type: 'docx', url: '/templates/XYZ template.docx' },
   },

@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { IconRosetteDiscountCheckFilled, IconBolt } from '@tabler/icons-react'
 import type { OutputFormat, ReportTemplate } from './types'
-import { projects, reportingPeriods, indicators } from './mockData'
+import { projects, reportingPeriods, indicators, dataSources } from './mockData'
 import { InfoTooltip } from './InfoTooltip'
 import { Button } from './components/Button'
 import { Select } from './components/Select'
+import { Input } from './components/Input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 type GenerateReportDialogProps = {
@@ -14,6 +15,7 @@ type GenerateReportDialogProps = {
     projectId?: string
     reportingPeriodId?: string
     indicatorId?: string
+    userInputs?: Record<string, string>
     outputFormat: OutputFormat
     saveToDocuments: boolean
     certify: boolean
@@ -25,6 +27,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
   const [projectId, setProjectId] = useState('')
   const [reportingPeriodId, setReportingPeriodId] = useState('')
   const [indicatorId, setIndicatorId] = useState('')
+  const [userInputValues, setUserInputValues] = useState<Record<string, string>>({})
   const [outputFormat, setOutputFormat] = useState<OutputFormat>('pdf')
   const [saveToDocuments, setSaveToDocuments] = useState(false)
   const [certify, setCertify] = useState(false)
@@ -36,9 +39,21 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
   const needsReportingPeriod = dataSourceIds.includes('projects-single-reporting-period')
   const needsIndicator = dataSourceIds.includes('indicators-single')
 
+  // Get user input data sources for this template
+  const userInputDataSources = template.dataSources
+    .map(tds => {
+      const ds = dataSources.find(d => d.id === tds.dataSourceId)
+      return ds?.category === 'User input' ? { ...ds, key: tds.key } : null
+    })
+    .filter((ds): ds is NonNullable<typeof ds> => ds !== null)
+
   // Validation
+  const userInputsFilled = userInputDataSources.every(ds => userInputValues[ds.id]?.trim())
   const requiredFieldsFilled =
-    (!needsProject || projectId) && (!needsReportingPeriod || reportingPeriodId) && (!needsIndicator || indicatorId)
+    (!needsProject || projectId) &&
+    (!needsReportingPeriod || reportingPeriodId) &&
+    (!needsIndicator || indicatorId) &&
+    userInputsFilled
 
   const isValid = requiredFieldsFilled && (!certify || isCertified)
 
@@ -47,6 +62,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
       projectId: needsProject ? projectId : undefined,
       reportingPeriodId: needsReportingPeriod ? reportingPeriodId : undefined,
       indicatorId: needsIndicator ? indicatorId : undefined,
+      userInputs: userInputDataSources.length > 0 ? userInputValues : undefined,
       outputFormat,
       saveToDocuments,
       certify,
@@ -55,13 +71,13 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[350px] max-w-[90vw]">
+      <DialogContent className="flex flex-col gap-5">
         <DialogHeader>
-          <DialogTitle>{template.name}</DialogTitle>
+          <DialogTitle>Generate report: {template.name}</DialogTitle>
         </DialogHeader>
 
         {needsProject && (
-          <div className="mb-5">
+          <div>
             <Select value={projectId} onChange={e => setProjectId(e.target.value)}>
               <option value="">Choose project...</option>
               {projects.map(project => (
@@ -74,7 +90,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
         )}
 
         {needsReportingPeriod && (
-          <div className="mb-5">
+          <div>
             <Select value={reportingPeriodId} onChange={e => setReportingPeriodId(e.target.value)}>
               <option value="">Choose reporting period...</option>
               {reportingPeriods.map(period => (
@@ -87,7 +103,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
         )}
 
         {needsIndicator && (
-          <div className="mb-5">
+          <div>
             <Select value={indicatorId} onChange={e => setIndicatorId(e.target.value)}>
               <option value="">Choose indicator...</option>
               {indicators.map(indicator => (
@@ -99,7 +115,23 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
           </div>
         )}
 
-        <div className="mb-5">
+        {userInputDataSources.map(ds => (
+          <div key={ds.id}>
+            <Input
+              type="text"
+              placeholder={ds.label}
+              value={userInputValues[ds.id] ?? ''}
+              onChange={e =>
+                setUserInputValues(prev => ({
+                  ...prev,
+                  [ds.id]: e.target.value,
+                }))
+              }
+            />
+          </div>
+        ))}
+
+        <div>
           <div className="inline-flex overflow-hidden rounded border border-gray-200">
             <button
               type="button"
@@ -122,7 +154,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
           </div>
         </div>
 
-        <div className="mb-5">
+        <div>
           <label className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-800">
             <input
               type="checkbox"
@@ -137,7 +169,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
           </label>
         </div>
 
-        <div className="mb-5">
+        <div>
           {!isCertified && (
             <label
               className={`flex items-center gap-2.5 text-sm ${
