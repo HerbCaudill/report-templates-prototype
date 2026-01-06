@@ -313,9 +313,7 @@ export function EditTemplatePage({
                               onChange={e => handleLabelChange(index, e.target.value)}
                               className="w-full rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
                             />
-                          ) : (
-                            <span className="text-gray-400">—</span>
-                          )}
+                          ) : null}
                         </td>
                       )}
                       <td className="border-b border-gray-200 p-2">
