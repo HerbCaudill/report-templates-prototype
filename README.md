@@ -10,14 +10,7 @@ A **report template** consists of:
 - **Data sources**: Zero or more data sources to be merged into the template
 - **Template file**: The uploaded document template (Word, Excel, or PowerPoint)
 
-**Data sources** define what data will be available when generating a report. Each data source is categorized and may require user selection at generation time.
-
-| Category        | Description              | Selection Behavior                                        |
-| --------------- | ------------------------ | --------------------------------------------------------- |
-| **Projects**    | Project-related data     | Single selection only (one project source per template)   |
-| **Indicators**  | Performance indicators   | Single selection only (one indicator source per template) |
-| **Data tables** | Custom data tables       | Multiple allowed                                          |
-| **User input**  | Custom text fields       | Multiple allowed                                          |
+**Data sources** define what data will be available when generating a report. |
 
 ### Project data sources
 
@@ -30,12 +23,16 @@ A **report template** consists of:
 - **All indicators**: Includes metadata for all indicators (definitions, disaggregations).
 - **Single indicator**: User selects one indicator when generating. Includes indicator metadata and all performance data (indicator results, targets, and comments).
 
+### Data table data sources
+
+Any number of data tables can be added as data sources to a template.
+
 ### User input data sources
 
-User input data sources allow templates to collect custom text values at generation time. Each user input data source has:
+Any number of user input fields can be added as data sources to a template. This allows templates to collect custom text values at generation time. Each user input data source has:
 
 - **Label**: Display text shown in the generate dialog (e.g., "Report author")
-- **Key**: Placeholder key used in the template (auto-generated from label as snake_case)
+- **Key**: Placeholder key used in the template (auto-generated from label, e.g. "report_author")
 
 ### Template data source keys
 
@@ -71,7 +68,7 @@ For each template row:
 
 - **Upload new template** button: Opens file picker to upload a template file, which creates a new template
 
-### Configure template page
+### Configure template screen
 
 A full-page form for creating or editing templates.
 
@@ -98,30 +95,22 @@ A full-page form for creating or editing templates.
 
 #### New template flow
 
-1. User clicks "Upload new template" from the list view
-2. File picker opens to select a template file
-3. Edit page opens with template created, name derived from filename
-4. User configures remaining fields
+1. User clicks "Upload new template" from the list view and picks a file
+   OR
+   User drags a document onto the screen
+2. Edit page opens with template created, name derived from filename
+3. User configures remaining fields
 
 #### Validation
 
 - Name must not be empty
 - A template file must be uploaded
-- Data sources are optional (but Generate button will be disabled on templates without them)
+- Data sources are required; the "Generate" button will be disabled on templates without them
 
 #### Save behavior
 
 - **Editing existing template:** Auto-saves on every change
 - **Creating new template:** Created immediately when file is uploaded
-
-#### Actions
-
-- **Done** button (with checkmark icon): Returns to list
-- **Delete this report template** link: Only shown for existing templates; deletes and returns to list
-
-#### Browser navigation
-
-Back button returns to list
 
 ### Generate report dialog
 
@@ -162,14 +151,3 @@ Shown based on template data sources:
 
 - **Generate** button: Generates the report and closes dialog
 - Click outside dialog: Closes without generating
-
-### Information tooltips
-
-Contextual help is provided via info icons (ⓘ) that show tooltips on hover:
-
-| Location                   | Tooltip Text                                                                                                                                    |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Data sources "Key" column  | "This key must match the placeholder tags in your template file."                                                                               |
-| Template upload            | "Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports." |
-| Save to documents checkbox | "In addition to downloading the report, it will be saved in the system document library in the "[Template Name]" folder."                       |
-| Certify checkbox           | "Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution."             |
