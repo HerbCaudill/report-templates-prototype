@@ -6,6 +6,7 @@ import { InfoTooltip } from './InfoTooltip'
 import { Button } from './components/Button'
 import { Select } from './components/Select'
 import { Input } from './components/Input'
+import { FormField } from './components/FormField'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Switch } from '@/components/ui/switch'
 
@@ -75,8 +76,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
         </DialogHeader>
 
         {needsProject && (
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-900">Project</label>
+          <FormField label="Project" compact>
             <Select value={projectId} onChange={e => setProjectId(e.target.value)}>
               <option value="">Select...</option>
               {projects.map(project => (
@@ -85,12 +85,11 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
                 </option>
               ))}
             </Select>
-          </div>
+          </FormField>
         )}
 
         {needsReportingPeriod && (
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-900">Reporting period</label>
+          <FormField label="Reporting period" compact>
             <Select value={reportingPeriodId} onChange={e => setReportingPeriodId(e.target.value)}>
               <option value="">Select...</option>
               {reportingPeriods.map(period => (
@@ -99,12 +98,11 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
                 </option>
               ))}
             </Select>
-          </div>
+          </FormField>
         )}
 
         {needsIndicator && (
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-900">Indicator</label>
+          <FormField label="Indicator" compact>
             <Select value={indicatorId} onChange={e => setIndicatorId(e.target.value)}>
               <option value="">Select...</option>
               {indicators.map(indicator => (
@@ -113,12 +111,11 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
                 </option>
               ))}
             </Select>
-          </div>
+          </FormField>
         )}
 
         {userInputDataSources.map(ds => (
-          <div key={ds.key} className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-900">{ds.label}</label>
+          <FormField key={ds.key} label={ds.label} compact>
             <Input
               type="text"
               value={userInputValues[ds.key] ?? ''}
@@ -129,11 +126,10 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
                 }))
               }
             />
-          </div>
+          </FormField>
         ))}
 
-        <div className="flex flex-col items-start gap-1">
-          <label className="text-sm font-medium text-gray-900">Output format</label>
+        <FormField label="Output format" compact>
           <div className="inline-flex overflow-hidden rounded border border-gray-200">
             <button
               type="button"
@@ -154,7 +150,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
               Word
             </button>
           </div>
-        </div>
+        </FormField>
 
         <div>
           <label className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-800">
