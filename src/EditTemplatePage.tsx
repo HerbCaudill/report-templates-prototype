@@ -208,7 +208,7 @@ export function EditTemplatePage({
     'Upload a Word, Excel, or PowerPoint file with placeholder tags like {{project.name}} that will be replaced with data when generating reports.'
 
   return (
-    <div className="w-[550px]">
+    <div className="w-[650px]">
       <h2 className="mb-8 text-3xl font-semibold text-gray-800">
         {isNew && !hasBeenCreated ? 'New report template' : 'Configure report template'}
       </h2>
