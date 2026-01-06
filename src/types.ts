@@ -8,6 +8,7 @@ export type DataSource = {
 export type TemplateDataSource = {
   dataSourceId: string
   key: string
+  label?: string // Custom label for user input data sources
 }
 
 export type TemplateFile = {

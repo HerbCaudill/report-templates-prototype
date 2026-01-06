@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { IconRosetteDiscountCheckFilled, IconBolt } from '@tabler/icons-react'
 import type { OutputFormat, ReportTemplate } from './types'
-import { projects, reportingPeriods, indicators, dataSources } from './mockData'
+import { projects, reportingPeriods, indicators } from './mockData'
 import { InfoTooltip } from './InfoTooltip'
 import { Button } from './components/Button'
 import { Select } from './components/Select'
@@ -42,14 +42,11 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
   // Get user input data sources for this template
   const userInputDataSources = template.dataSources
-    .map(tds => {
-      const ds = dataSources.find(d => d.id === tds.dataSourceId)
-      return ds?.category === 'User input' ? { ...ds, key: tds.key } : null
-    })
-    .filter((ds): ds is NonNullable<typeof ds> => ds !== null)
+    .filter(tds => tds.dataSourceId === 'user-input')
+    .map(tds => ({ key: tds.key, label: tds.label ?? 'User input' }))
 
   // Validation
-  const userInputsFilled = userInputDataSources.every(ds => userInputValues[ds.id]?.trim())
+  const userInputsFilled = userInputDataSources.every(ds => userInputValues[ds.key]?.trim())
   const requiredFieldsFilled =
     (!needsProject || projectId) &&
     (!needsReportingPeriod || reportingPeriodId) &&
@@ -120,15 +117,15 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
         )}
 
         {userInputDataSources.map(ds => (
-          <div key={ds.id} className="flex flex-col gap-1">
+          <div key={ds.key} className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">{ds.label}</label>
             <Input
               type="text"
-              value={userInputValues[ds.id] ?? ''}
+              value={userInputValues[ds.key] ?? ''}
               onChange={e =>
                 setUserInputValues(prev => ({
                   ...prev,
-                  [ds.id]: e.target.value,
+                  [ds.key]: e.target.value,
                 }))
               }
             />

@@ -35,6 +35,8 @@ export function EditTemplatePage({
   const [selectedDataSources, setSelectedDataSources] = useState<TemplateDataSource[]>(template?.dataSources ?? [])
   const [templateFile, setTemplateFile] = useState<TemplateFile | null>(template?.templateFile ?? null)
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
+  const [showUserInputForm, setShowUserInputForm] = useState(false)
+  const [newUserInputLabel, setNewUserInputLabel] = useState('')
   const [hasBeenCreated, setHasBeenCreated] = useState(!isNew)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -71,12 +73,16 @@ export function EditTemplatePage({
     return acc
   }, {})
 
-  const getKey = (dataSource: DataSource): string => {
-    if (dataSource.defaultKey) return dataSource.defaultKey
-    return dataSource.label
+  const toSnakeCase = (str: string): string => {
+    return str
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '_')
       .replace(/^_|_$/g, '')
+  }
+
+  const getKey = (dataSource: DataSource): string => {
+    if (dataSource.defaultKey) return dataSource.defaultKey
+    return toSnakeCase(dataSource.label)
   }
 
   const handleAddDataSource = (dataSource: DataSource) => {
@@ -86,6 +92,23 @@ export function EditTemplatePage({
     }
     const updated = [...selectedDataSources, newDataSource]
     setSelectedDataSources(updated)
+    setShowDataSourceDropdown(false)
+    if (hasBeenCreated) {
+      onChange(getCurrentTemplate({ dataSources: updated }))
+    }
+  }
+
+  const handleAddUserInput = () => {
+    if (!newUserInputLabel.trim()) return
+    const newDataSource: TemplateDataSource = {
+      dataSourceId: 'user-input',
+      key: toSnakeCase(newUserInputLabel),
+      label: newUserInputLabel.trim(),
+    }
+    const updated = [...selectedDataSources, newDataSource]
+    setSelectedDataSources(updated)
+    setShowUserInputForm(false)
+    setNewUserInputLabel('')
     setShowDataSourceDropdown(false)
     if (hasBeenCreated) {
       onChange(getCurrentTemplate({ dataSources: updated }))
@@ -144,11 +167,15 @@ export function EditTemplatePage({
     e.target.value = ''
   }
 
-  const getDataSourceLabel = (dataSourceId: string) => {
-    return dataSources.find(ds => ds.id === dataSourceId)?.label ?? 'Unknown'
+  const getDataSourceLabel = (tds: TemplateDataSource) => {
+    if (tds.dataSourceId === 'user-input') {
+      return tds.label ?? 'User input'
+    }
+    return dataSources.find(ds => ds.id === tds.dataSourceId)?.label ?? 'Unknown'
   }
 
   const getDataSourceCategory = (dataSourceId: string) => {
+    if (dataSourceId === 'user-input') return 'User input'
     return dataSources.find(ds => ds.id === dataSourceId)?.category
   }
 
@@ -262,7 +289,7 @@ export function EditTemplatePage({
                 <tbody>
                   {selectedDataSources.map((ds, index) => (
                     <tr key={index}>
-                      <td className="border-b border-gray-200 p-2">{getDataSourceLabel(ds.dataSourceId)}</td>
+                      <td className="border-b border-gray-200 p-2">{getDataSourceLabel(ds)}</td>
                       <td className="border-b border-gray-200 p-2">
                         <input
                           type="text"
@@ -318,6 +345,39 @@ export function EditTemplatePage({
                       </div>
                     )
                   })}
+                  <div className="border-b border-gray-100 last:border-b-0">
+                    <div className="px-3 pb-1 pt-2 text-[11px] font-semibold uppercase text-gray-500">User input</div>
+                    {showUserInputForm ? (
+                      <div className="flex gap-2 px-3 pb-3">
+                        <input
+                          type="text"
+                          value={newUserInputLabel}
+                          onChange={e => setNewUserInputLabel(e.target.value)}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') handleAddUserInput()
+                            if (e.key === 'Escape') {
+                              setShowUserInputForm(false)
+                              setNewUserInputLabel('')
+                            }
+                          }}
+                          placeholder="Label"
+                          className="flex-1 rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
+                          autoFocus
+                        />
+                        <Button onClick={handleAddUserInput} disabled={!newUserInputLabel.trim()}>
+                          Add
+                        </Button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className="block w-full bg-transparent px-5 py-2 text-left text-[13px] text-gray-800 hover:bg-gray-50"
+                        onClick={() => setShowUserInputForm(true)}
+                      >
+                        + Add user input field...
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
