@@ -33,12 +33,12 @@ function TemplateCard({
       onClick={() => canGenerate && onGenerate(template)}
       disabled={!canGenerate}
       title={canGenerate ? 'Click to generate report' : 'Add data sources to enable generation'}
-      className={`group relative flex w-48 flex-col rounded border border-gray-200 bg-white p-3 hover:shadow-md ${
+      className={`group relative flex w-48 flex-col rounded bg-white ${
         canGenerate ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'
       }`}
     >
       {/* Menu button - positioned absolutely in upper right */}
-      <div className="absolute right-5 top-5 z-10" onClick={e => e.stopPropagation()}>
+      <div className="absolute right-2 top-2 z-10" onClick={e => e.stopPropagation()}>
         <div className="relative">
           <button
             type="button"
@@ -105,12 +105,12 @@ function TemplateCard({
       </div>
 
       {/* Thumbnail */}
-      <div className="flex aspect-3/4 items-center justify-center overflow-hidden rounded border border-gray-200 bg-gray-50">
+      <div className="flex aspect-3/4 items-center justify-center overflow-hidden rounded bg-gray-50 shadow-md">
         <img src={thumbnailUrl} alt={template.name} className="h-full w-full object-cover" />
       </div>
 
       {/* Title */}
-      <div className="flex-1 pt-3 text-left">
+      <div className="flex-1 pt-2 text-left">
         <h4 className="text-sm font-medium text-gray-800">
           {template.name}
           {template.description && (
