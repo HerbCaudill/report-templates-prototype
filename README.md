@@ -12,12 +12,12 @@ A **report template** consists of:
 
 **Data sources** define what data will be available when generating a report. Each data source is categorized and may require user selection at generation time.
 
-| Category          | Description                  | Selection Behavior                                        |
-| ----------------- | ---------------------------- | --------------------------------------------------------- |
-| **Projects**      | Project-related data         | Single selection only (one project source per template)   |
-| **Indicators**    | Performance indicators       | Single selection only (one indicator source per template) |
-| **Data tables**   | Custom data tables           | Multiple allowed                                          |
-| **Saved reports** | Previously saved report data | Multiple allowed                                          |
+| Category        | Description              | Selection Behavior                                        |
+| --------------- | ------------------------ | --------------------------------------------------------- |
+| **Projects**    | Project-related data     | Single selection only (one project source per template)   |
+| **Indicators**  | Performance indicators   | Single selection only (one indicator source per template) |
+| **Data tables** | Custom data tables       | Multiple allowed                                          |
+| **User input**  | Custom text fields       | Multiple allowed                                          |
 
 ### Project data sources
 
@@ -29,6 +29,13 @@ A **report template** consists of:
 
 - **All indicators**: Includes metadata for all indicators (definitions, disaggregations).
 - **Single indicator**: User selects one indicator when generating. Includes indicator metadata and all performance data (indicator results, targets, and comments).
+
+### User input data sources
+
+User input data sources allow templates to collect custom text values at generation time. Each user input data source has:
+
+- **Label**: Display text shown in the generate dialog (e.g., "Report author")
+- **Key**: Placeholder key used in the template (auto-generated from label as snake_case)
 
 ### Template data source keys
 
@@ -49,13 +56,14 @@ The main view displays all available templates, organized by group.
 #### Layout
 
 - Templates are grouped by their `group` field
-- Groups are displayed in alphabetical order, with ungrouped templates shown first (without a heading)
+- Groups can be reordered via drag-and-drop (drag handles appear on hover)
+- Default order: "Required reporting" first, then alphabetical, ungrouped templates last
 - Each group shows a heading followed by a list of template rows
 
 For each template row:
 
-- **Edit button**: Opens the edit page for the template
-- **Document icon**: Visual indicator of document type (Word/Excel/Powerpoint)
+- **Configure button**: Opens the edit page for the template
+- **Document thumbnail**: Visual preview of the template file
 - **Template name**: Display name
 - **Generate button**: Opens the generate dialog (disabled if no data sources configured)
 
@@ -63,7 +71,7 @@ For each template row:
 
 - **Upload new template** button: Opens file picker to upload a template file, which creates a new template
 
-### Edit template page
+### Configure template page
 
 A full-page form for creating or editing templates.
 
@@ -77,10 +85,12 @@ A full-page form for creating or editing templates.
   - Newly created groups display as a tag next to the dropdown
 - **Data sources**: Table of selected data sources with:
   - Type column: The data source label
+  - Label column: Editable label for user input data sources (blank for other types)
   - Key column: Editable text input for the placeholder key
   - Delete button: Removes the data source
   - "Add datasource..." dropdown: Grouped by category
   - Warning message shown when no data sources are configured
+- **Allow certification**: Toggle to enable/disable certification option for this template
 - **Template file** (required): Displays the uploaded template with:
   - Word icon and filename
   - **Download** button: Downloads the template file
@@ -124,16 +134,17 @@ Shown based on template data sources:
 - **Project dropdown**: Shown if template uses a single project data source
 - **Reporting period dropdown**: Shown if template requires a reporting period
 - **Indicator dropdown**: Shown if template uses a single indicator data source
+- **User input fields**: Text inputs for each user input data source (labeled with the custom label)
 
 #### Static fields
 
 - **Output format toggle**: PDF or Word (default: PDF)
-- **Save to documents checkbox**: Option to save to system document library
-- **Certify checkbox**: Option to digitally certify the report
+- **Save to documents switch**: Option to save to system document library
+- **Certify switch**: Option to digitally certify the report (only shown if template allows certification)
 
 #### Certification flow
 
-1. User checks "Certify" checkbox (disabled until required fields are filled)
+1. User enables "Certify" switch (disabled until required fields are filled)
 2. Certification panel appears with statement: "I, [User Name], certify this report."
 3. Generate button is temporarily disabled
 4. User clicks "Certify" button
@@ -143,7 +154,8 @@ Shown based on template data sources:
 #### Validation
 
 - All required dropdowns must have a selection
-- If "Certify" is checked, certification must be completed
+- All user input fields must be filled
+- If "Certify" is enabled, certification must be completed
 - Generate button is disabled until valid
 
 #### Actions
