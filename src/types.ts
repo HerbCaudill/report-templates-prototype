@@ -24,6 +24,7 @@ export type ReportTemplate = {
   group: string
   dataSources: TemplateDataSource[]
   templateFile: TemplateFile | null
+  allowCertification?: boolean
 }
 
 export type Project = {

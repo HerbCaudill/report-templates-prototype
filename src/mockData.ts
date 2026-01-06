@@ -60,6 +60,7 @@ export const initialTemplates: ReportTemplate[] = [
       { dataSourceId: 'user-input', key: 'partner_contact', label: 'Partner contact' },
     ],
     templateFile: { name: 'XYZ template.docx', type: 'docx', url: '/templates/XYZ template.docx' },
+    allowCertification: true,
   },
   {
     id: 'tpl-2',
@@ -68,6 +69,7 @@ export const initialTemplates: ReportTemplate[] = [
     group: 'Required reporting',
     dataSources: [{ dataSourceId: 'projects-single', key: 'project' }],
     templateFile: { name: 'QRS template.docx', type: 'docx', url: '/templates/QRS template.docx' },
+    allowCertification: true,
   },
   {
     id: 'tpl-3',

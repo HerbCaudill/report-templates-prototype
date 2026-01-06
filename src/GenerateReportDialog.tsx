@@ -166,41 +166,43 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
           </label>
         </div>
 
-        <div>
-          {!isCertified && (
-            <label
-              className={`flex items-center gap-2.5 text-sm ${
-                requiredFieldsFilled ? 'cursor-pointer text-gray-800' : 'cursor-not-allowed text-gray-400'
-              }`}
-            >
-              <Switch
-                checked={certify}
-                onCheckedChange={checked => {
-                  setCertify(checked)
-                  if (!checked) setIsCertified(false)
-                }}
-                disabled={!requiredFieldsFilled}
-              />
-              <span>Certify</span>
-              <InfoTooltip text="Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution." />
-            </label>
-          )}
-          {certify && (
-            <div className="mt-3 rounded border border-gray-200 bg-gray-50 p-3">
-              <p className="text-sm text-gray-500">I, Herb Caudill, certify this report.</p>
-              {isCertified ? (
-                <div className="mt-3 flex items-center gap-2 text-sm text-green-700">
-                  <IconRosetteDiscountCheckFilled className="size-6" />
-                  <span>Certified</span>
-                </div>
-              ) : (
-                <Button variant="primary" className="mt-3 w-full" onClick={() => setIsCertified(true)}>
-                  Certify
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
+        {template.allowCertification && (
+          <div>
+            {!isCertified && (
+              <label
+                className={`flex items-center gap-2.5 text-sm ${
+                  requiredFieldsFilled ? 'cursor-pointer text-gray-800' : 'cursor-not-allowed text-gray-400'
+                }`}
+              >
+                <Switch
+                  checked={certify}
+                  onCheckedChange={checked => {
+                    setCertify(checked)
+                    if (!checked) setIsCertified(false)
+                  }}
+                  disabled={!requiredFieldsFilled}
+                />
+                <span>Certify</span>
+                <InfoTooltip text="Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution." />
+              </label>
+            )}
+            {certify && (
+              <div className="mt-3 rounded border border-gray-200 bg-gray-50 p-3">
+                <p className="text-sm text-gray-500">I, Herb Caudill, certify this report.</p>
+                {isCertified ? (
+                  <div className="mt-3 flex items-center gap-2 text-sm text-green-700">
+                    <IconRosetteDiscountCheckFilled className="size-6" />
+                    <span>Certified</span>
+                  </div>
+                ) : (
+                  <Button variant="primary" className="mt-3 w-full" onClick={() => setIsCertified(true)}>
+                    Certify
+                  </Button>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="mt-6 flex justify-end gap-2">
           <Button variant="primary" onClick={handleGenerate} disabled={!isValid} className="flex items-center gap-1.5">

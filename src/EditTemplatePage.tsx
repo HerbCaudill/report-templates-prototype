@@ -8,6 +8,7 @@ import { TextArea } from './components/TextArea'
 import { Button } from './components/Button'
 import { FormField } from './components/FormField'
 import { Select } from './components/Select'
+import { Switch } from '@/components/ui/switch'
 
 type EditTemplatePageProps = {
   template: ReportTemplate | null
@@ -37,6 +38,7 @@ export function EditTemplatePage({
   const [showDataSourceDropdown, setShowDataSourceDropdown] = useState(false)
   const [showUserInputForm, setShowUserInputForm] = useState(false)
   const [newUserInputLabel, setNewUserInputLabel] = useState('')
+  const [allowCertification, setAllowCertification] = useState(template?.allowCertification ?? false)
   const [hasBeenCreated, setHasBeenCreated] = useState(!isNew)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -48,6 +50,7 @@ export function EditTemplatePage({
     group,
     dataSources: selectedDataSources,
     templateFile,
+    allowCertification,
     ...overrides,
   })
 
@@ -423,6 +426,22 @@ export function EditTemplatePage({
               </a>
               <Button onClick={() => fileInputRef.current?.click()}>Replace...</Button>
             </div>
+          </FormField>
+
+          <FormField label="Options">
+            <label className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-800">
+              <Switch
+                checked={allowCertification}
+                onCheckedChange={checked => {
+                  setAllowCertification(checked)
+                  if (hasBeenCreated) {
+                    onChange(getCurrentTemplate({ allowCertification: checked }))
+                  }
+                }}
+              />
+              <span>Allow certification</span>
+              <InfoTooltip text="When enabled, users can certify the report with their digital signature when generating it." />
+            </label>
           </FormField>
         </>
       )}
