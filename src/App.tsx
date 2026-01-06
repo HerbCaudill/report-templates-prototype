@@ -9,6 +9,7 @@ type View = 'list' | 'edit'
 
 function App() {
   const [templates, setTemplates] = useState<ReportTemplate[]>(initialTemplates)
+  const [groupOrder, setGroupOrder] = useState<string[]>([])
   const [view, setView] = useState<View>('list')
   const [editingTemplate, setEditingTemplate] = useState<ReportTemplate | null>(null)
   const [isNewTemplate, setIsNewTemplate] = useState(false)
@@ -137,10 +138,12 @@ function App() {
       {view === 'list' && (
         <ReportTemplatesList
           templates={templates}
+          groupOrder={groupOrder}
           onEdit={handleEdit}
           onGenerate={handleGenerate}
           onDelete={handleDeleteTemplate}
           onUploadNewTemplate={handleUploadNewTemplate}
+          onReorderGroups={setGroupOrder}
         />
       )}
 

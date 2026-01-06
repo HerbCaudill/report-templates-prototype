@@ -1,15 +1,17 @@
 import { useRef, useState } from 'react'
-import { IconTrash, IconDots, IconBolt, IconPencil } from '@tabler/icons-react'
+import { IconTrash, IconDots, IconBolt, IconPencil, IconGripVertical } from '@tabler/icons-react'
 import type { ReportTemplate, TemplateFile } from './types'
 import { Button } from './components/Button'
 import { InfoTooltip } from './InfoTooltip'
 
 type ReportTemplatesListProps = {
   templates: ReportTemplate[]
+  groupOrder: string[]
   onEdit: (template: ReportTemplate) => void
   onGenerate: (template: ReportTemplate) => void
   onDelete: (template: ReportTemplate) => void
   onUploadNewTemplate: (file: TemplateFile) => void
+  onReorderGroups: (groups: string[]) => void
 }
 
 function TemplateCard({
@@ -126,12 +128,16 @@ function TemplateCard({
 
 export function ReportTemplatesList({
   templates,
+  groupOrder,
   onEdit,
   onGenerate,
   onDelete,
   onUploadNewTemplate,
+  onReorderGroups,
 }: ReportTemplatesListProps) {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [draggedGroup, setDraggedGroup] = useState<string | null>(null)
+  const [dragOverGroup, setDragOverGroup] = useState<string | null>(null)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -159,20 +165,88 @@ export function ReportTemplatesList({
     return acc
   }, {})
 
-  // Sort groups: Ungrouped first (no heading), then named groups alphabetically
-  const sortedGroups = Object.keys(groupedTemplates).sort((a, b) => {
-    if (a === 'Ungrouped') return -1
-    if (b === 'Ungrouped') return 1
+  // Get all current groups
+  const allGroups = Object.keys(groupedTemplates)
+
+  // Default order: "Required reporting" first, then other named groups alphabetically, then "Ungrouped" last
+  const defaultOrder = allGroups.sort((a, b) => {
+    if (a === 'Ungrouped') return 1
+    if (b === 'Ungrouped') return -1
+    if (a === 'Required reporting') return -1
+    if (b === 'Required reporting') return 1
     return a.localeCompare(b)
   })
+
+  // Use provided order, falling back to default for any new groups
+  const sortedGroups =
+    groupOrder.length > 0
+      ? [...groupOrder.filter(g => allGroups.includes(g)), ...allGroups.filter(g => !groupOrder.includes(g))]
+      : defaultOrder
+
+  const handleDragStart = (groupName: string) => {
+    setDraggedGroup(groupName)
+  }
+
+  const handleDragOver = (e: React.DragEvent, groupName: string) => {
+    e.preventDefault()
+    if (draggedGroup && draggedGroup !== groupName) {
+      setDragOverGroup(groupName)
+    }
+  }
+
+  const handleDragLeave = () => {
+    setDragOverGroup(null)
+  }
+
+  const handleDrop = (targetGroup: string) => {
+    if (!draggedGroup || draggedGroup === targetGroup) {
+      setDraggedGroup(null)
+      setDragOverGroup(null)
+      return
+    }
+
+    const newOrder = [...sortedGroups]
+    const draggedIndex = newOrder.indexOf(draggedGroup)
+    const targetIndex = newOrder.indexOf(targetGroup)
+
+    newOrder.splice(draggedIndex, 1)
+    newOrder.splice(targetIndex, 0, draggedGroup)
+
+    onReorderGroups(newOrder)
+    setDraggedGroup(null)
+    setDragOverGroup(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedGroup(null)
+    setDragOverGroup(null)
+  }
 
   return (
     <div className="max-w-6xl">
       <h2 className="mb-6 text-3xl font-semibold text-gray-800">Report templates</h2>
       <div className="mb-6">
         {sortedGroups.map(groupName => (
-          <div key={groupName} className="mb-8 last:mb-0">
-            {groupName !== 'Ungrouped' && <h3 className="mb-3 border-b border-gray-400 pb-2 text-lg font-semibold text-gray-600">{groupName}</h3>}
+          <div
+            key={groupName}
+            className={`mb-8 last:mb-0 ${dragOverGroup === groupName ? 'rounded-lg bg-gray-100' : ''}`}
+            onDragOver={e => handleDragOver(e, groupName)}
+            onDragLeave={handleDragLeave}
+            onDrop={() => handleDrop(groupName)}
+          >
+            {groupName !== 'Ungrouped' && (
+              <h3
+                className={`mb-3 flex cursor-grab items-center gap-2 border-b border-gray-400 pb-2 text-lg font-semibold text-gray-600 ${
+                  draggedGroup === groupName ? 'opacity-50' : ''
+                }`}
+                draggable
+                onDragStart={() => handleDragStart(groupName)}
+                onDragEnd={handleDragEnd}
+              >
+                <IconGripVertical className="size-5 text-gray-400" />
+                {groupName}
+              </h3>
+            )}
             <div className="grid grid-cols-[repeat(auto-fill,minmax(12rem,1fr))] gap-4">
               {groupedTemplates[groupName].map(template => (
                 <TemplateCard
