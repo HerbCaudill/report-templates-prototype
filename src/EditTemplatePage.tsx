@@ -132,6 +132,15 @@ export function EditTemplatePage({
     }
   }
 
+  const handleLabelChange = (index: number, newLabel: string) => {
+    const updated = [...selectedDataSources]
+    updated[index] = { ...updated[index], label: newLabel }
+    setSelectedDataSources(updated)
+    if (hasBeenCreated) {
+      onChange(getCurrentTemplate({ dataSources: updated }))
+    }
+  }
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -277,6 +286,9 @@ export function EditTemplatePage({
                 <thead>
                   <tr>
                     <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Type</th>
+                    {selectedDataSources.some(ds => ds.dataSourceId === 'user-input') && (
+                      <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">Label</th>
+                    )}
                     <th className="border-b border-gray-200 p-2 text-left text-xs font-normal text-gray-400">
                       <span className="flex items-center gap-1">
                         Key
@@ -289,7 +301,23 @@ export function EditTemplatePage({
                 <tbody>
                   {selectedDataSources.map((ds, index) => (
                     <tr key={index}>
-                      <td className="border-b border-gray-200 p-2">{getDataSourceLabel(ds)}</td>
+                      <td className="border-b border-gray-200 p-2">
+                        {ds.dataSourceId === 'user-input' ? 'User input' : getDataSourceLabel(ds)}
+                      </td>
+                      {selectedDataSources.some(d => d.dataSourceId === 'user-input') && (
+                        <td className="border-b border-gray-200 p-2">
+                          {ds.dataSourceId === 'user-input' ? (
+                            <input
+                              type="text"
+                              value={ds.label ?? ''}
+                              onChange={e => handleLabelChange(index, e.target.value)}
+                              className="w-full rounded border border-gray-200 px-2 py-1 text-sm focus:border-black focus:outline-none"
+                            />
+                          ) : (
+                            <span className="text-gray-400">—</span>
+                          )}
+                        </td>
+                      )}
                       <td className="border-b border-gray-200 p-2">
                         <input
                           type="text"
