@@ -210,7 +210,7 @@ export function EditTemplatePage({
   return (
     <div className="w-[550px]">
       <h2 className="mb-8 text-3xl font-semibold text-gray-800">
-        {isNew && !hasBeenCreated ? 'New report template' : 'Edit report template'}
+        {isNew && !hasBeenCreated ? 'New report template' : 'Configure report template'}
       </h2>
 
       {/* Hidden file input used by both upload buttons */}

@@ -82,7 +82,7 @@ function TemplateCard({
                   className="flex w-full items-center gap-2 px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50"
                 >
                   <IconPencil className="size-4" />
-                  Edit
+                  Configure
                 </button>
                 <button
                   type="button"
