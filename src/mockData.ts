@@ -56,8 +56,8 @@ export const initialTemplates: ReportTemplate[] = [
     dataSources: [
       { dataSourceId: 'projects-single-reporting-period', key: 'project' },
       { dataSourceId: 'dt-1', key: 'trainings' },
-      { dataSourceId: 'user-input', key: 'program_manager', label: 'Name of program manager' },
-      { dataSourceId: 'user-input', key: 'partner_contact', label: 'Name of partner contact' },
+      { dataSourceId: 'user-input', key: 'program_manager', label: 'Program manager' },
+      { dataSourceId: 'user-input', key: 'partner_contact', label: 'Partner contact' },
     ],
     templateFile: { name: 'XYZ template.docx', type: 'docx', url: '/templates/XYZ template.docx' },
   },
