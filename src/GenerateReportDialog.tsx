@@ -7,6 +7,7 @@ import { Button } from './components/Button'
 import { Select } from './components/Select'
 import { Input } from './components/Input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Switch } from '@/components/ui/switch'
 
 type GenerateReportDialogProps = {
   template: ReportTemplate
@@ -160,12 +161,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
         <div>
           <label className="flex cursor-pointer items-center gap-2.5 text-sm text-gray-800">
-            <input
-              type="checkbox"
-              checked={saveToDocuments}
-              onChange={e => setSaveToDocuments(e.target.checked)}
-              className="size-4.5 accent-black"
-            />
+            <Switch checked={saveToDocuments} onCheckedChange={setSaveToDocuments} />
             <span>Save to documents</span>
             <InfoTooltip
               text={`In addition to downloading the report, it will be saved in the system document library in the "${template.name}" folder.`}
@@ -180,15 +176,13 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
                 requiredFieldsFilled ? 'cursor-pointer text-gray-800' : 'cursor-not-allowed text-gray-400'
               }`}
             >
-              <input
-                type="checkbox"
+              <Switch
                 checked={certify}
-                onChange={e => {
-                  setCertify(e.target.checked)
-                  if (!e.target.checked) setIsCertified(false)
+                onCheckedChange={checked => {
+                  setCertify(checked)
+                  if (!checked) setIsCertified(false)
                 }}
                 disabled={!requiredFieldsFilled}
-                className="size-4.5 accent-black disabled:opacity-50"
               />
               <span>Certify</span>
               <InfoTooltip text="Certifying a report attaches your digital signature to the report, confirming the data is accurate and approved for distribution." />
