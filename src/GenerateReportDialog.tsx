@@ -135,7 +135,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
           </div>
         ))}
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col items-start gap-1">
           <label className="text-sm font-medium text-gray-700">Output format</label>
           <div className="inline-flex overflow-hidden rounded border border-gray-200">
             <button
