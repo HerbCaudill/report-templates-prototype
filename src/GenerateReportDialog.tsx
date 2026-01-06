@@ -76,7 +76,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
         {needsProject && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Project</label>
+            <label className="text-sm font-medium text-gray-900">Project</label>
             <Select value={projectId} onChange={e => setProjectId(e.target.value)}>
               <option value="">Select...</option>
               {projects.map(project => (
@@ -90,7 +90,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
         {needsReportingPeriod && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Reporting period</label>
+            <label className="text-sm font-medium text-gray-900">Reporting period</label>
             <Select value={reportingPeriodId} onChange={e => setReportingPeriodId(e.target.value)}>
               <option value="">Select...</option>
               {reportingPeriods.map(period => (
@@ -104,7 +104,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
         {needsIndicator && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Indicator</label>
+            <label className="text-sm font-medium text-gray-900">Indicator</label>
             <Select value={indicatorId} onChange={e => setIndicatorId(e.target.value)}>
               <option value="">Select...</option>
               {indicators.map(indicator => (
@@ -118,7 +118,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
 
         {userInputDataSources.map(ds => (
           <div key={ds.key} className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">{ds.label}</label>
+            <label className="text-sm font-medium text-gray-900">{ds.label}</label>
             <Input
               type="text"
               value={userInputValues[ds.key] ?? ''}
@@ -133,7 +133,7 @@ export function GenerateReportDialog({ template, isOpen, onGenerate, onClose }: 
         ))}
 
         <div className="flex flex-col items-start gap-1">
-          <label className="text-sm font-medium text-gray-700">Output format</label>
+          <label className="text-sm font-medium text-gray-900">Output format</label>
           <div className="inline-flex overflow-hidden rounded border border-gray-200">
             <button
               type="button"

@@ -14,7 +14,7 @@ export function FormField({
 }) {
   return (
     <div className="mb-8">
-      <label htmlFor={htmlFor} className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-700">
+      <label htmlFor={htmlFor} className="mb-2 flex items-center gap-1 text-sm font-semibold text-gray-900">
         {label}
         {tooltip && <InfoTooltip text={tooltip} />}
       </label>
