@@ -16,8 +16,6 @@ export const dataSources: DataSource[] = [
   // Data tables
   { id: 'dt-1', label: 'Journalist trainings', category: 'Data tables' },
   { id: 'dt-2', label: 'Vaccinations', category: 'Data tables' },
-  // Saved reports
-  { id: 'sr-1', label: 'Trainings by quarter', category: 'Saved reports' },
 ]
 
 export const projects: Project[] = [
