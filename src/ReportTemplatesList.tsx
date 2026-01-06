@@ -236,14 +236,14 @@ export function ReportTemplatesList({
           >
             {groupName !== 'Ungrouped' && (
               <h3
-                className={`mb-3 flex cursor-grab items-center gap-2 border-b border-gray-400 pb-2 text-lg font-semibold text-gray-600 ${
+                className={`group/header mb-3 flex cursor-grab items-center gap-2 border-b border-gray-400 pb-2 text-lg font-semibold text-gray-600 ${
                   draggedGroup === groupName ? 'opacity-50' : ''
                 }`}
                 draggable
                 onDragStart={() => handleDragStart(groupName)}
                 onDragEnd={handleDragEnd}
               >
-                <IconGripVertical className="size-5 text-gray-400" />
+                <IconGripVertical className="size-5 text-gray-400 opacity-0 transition-opacity group-hover/header:opacity-100" />
                 {groupName}
               </h3>
             )}
